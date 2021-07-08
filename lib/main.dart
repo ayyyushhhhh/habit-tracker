@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:time_table/hive%20boxes/habit_box.dart';
 import 'package:time_table/models/habit_tracker/habit_model.dart';
+import 'package:time_table/screens/habit%20tracker/add_name_screen.dart';
 import 'package:time_table/screens/habit%20tracker/habit_tracker_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -30,27 +31,33 @@ class MyApp extends StatelessWidget {
   }
 
   void _saveSkipDates() {
-    DateTime previousDate = DateTime.now().subtract(Duration(days: 1));
-    final myBox = HabitBox.getHabitBox();
-    List<Habit> allHabits = myBox.values.toList().cast<Habit>();
-    allHabits.forEach((habit) {
-      if (!habit.completedDates!.contains(previousDate) &&
-          !habit.skipDates!.contains(previousDate)) {
-        myBox.put(
-          habit.title,
-          habit.updateWith(
-            skipDate: previousDate,
-          ),
-        );
-      }
-    });
+    if (Prefrences.getDate() !=
+        DateFormat('dd-MM-yyyy').format(DateTime.now())) {
+      DateTime previousDate = DateTime.now().subtract(Duration(days: 1));
+
+      final myBox = HabitBox.getHabitBox();
+      List<Habit> allHabits = myBox.values.toList().cast<Habit>();
+      allHabits.forEach((habit) {
+        print("${habit.completedDates} + ${habit.skipDates}");
+        if (!habit.completedDates!.contains(previousDate) &&
+            !habit.skipDates!.contains(previousDate)) {
+          myBox.put(
+            habit.title,
+            habit.updateWith(
+              skipDate: previousDate,
+            ),
+          );
+        }
+      });
+    }
   }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    _resetSavedData();
     _saveSkipDates();
+    _resetSavedData();
+
     return MaterialApp(
       title: 'Habit Tracker',
       debugShowCheckedModeBanner: false,
@@ -58,7 +65,9 @@ class MyApp extends StatelessWidget {
         textTheme:
             ThemeData.dark().textTheme.apply(fontFamily: "San Francisco"),
       ),
-      home: HabitTrackerScreen(),
+      home: Prefrences.getuserName() == ""
+          ? AddNameScreen()
+          : HabitTrackerScreen(),
     );
   }
 }

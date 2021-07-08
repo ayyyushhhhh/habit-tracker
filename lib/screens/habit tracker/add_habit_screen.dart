@@ -20,7 +20,6 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
           completedDates: [],
           skipDates: [],
           description: description!);
-      // habitProv.addHabitToList(habit: habit);
       final habitbox = HabitBox.getHabitBox();
       habitbox.put(habit.title, habit);
       Navigator.pop(context);
@@ -29,7 +28,6 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final habitProv = Provider.of<HabitTrackerProvider>(context, listen: false);
     final deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
@@ -72,6 +70,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Enter Habit title eg,Running"),
+                  maxLength: 10,
                 ),
               ),
               Text(
@@ -98,6 +97,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Add a little description eg, run 10 km "),
+                  maxLength: 20,
                 ),
               ),
               Text(

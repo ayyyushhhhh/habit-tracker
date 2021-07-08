@@ -9,6 +9,7 @@ import 'package:time_table/screens/habit%20tracker/add_habit_screen.dart';
 import 'package:time_table/screens/habit%20tracker/habit_summary_screen.dart';
 import 'package:time_table/utils/habit%20tracker/habit_tracker_colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:time_table/utils/habit%20tracker/prefrences.dart';
 
 class HabitTrackerScreen extends StatefulWidget {
   @override
@@ -30,14 +31,6 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
     super.dispose();
     Hive.close();
   }
-
-  // void _saveSkipDates(){
-  //    final myBox = HabitBox.getHabitBox();
-  //     List<Habit> allHabits = myBox.values.toList().cast<Habit>();
-  //     allHabits.forEach((habit) {
-  //       myBox.put(habit.title, habit.updateWith(skipDate: DateTime.now()));
-  //     });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -100,33 +93,6 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                 },
                 valueListenable: HabitBox.getHabitBox().listenable(),
               ),
-              // Consumer<HabitTrackerProvider>(
-              //   builder: (BuildContext context, habitData, Widget? child) {
-              //     return Container(
-              //       height: deviceHeight! / 3,
-              //       child: ListView.builder(
-              //         shrinkWrap: true,
-              //         scrollDirection: Axis.horizontal,
-              //         itemCount: habitData.habitList.length + 1,
-              //         itemBuilder: (BuildContext context, int index) {
-              //           if (index == habitData.habitList.length) {
-              //             return GestureDetector(
-              //                 onTap: () {
-              //                   Navigator.of(context).push(
-              //                     MaterialPageRoute(
-              //                         builder: (BuildContext context) {
-              //                       return AddHabitScreen();
-              //                     }),
-              //                   );
-              //                 },
-              //                 child: InkWell(child: AddHabitcard()));
-              //           }
-              //           return HabitCard(habit: habitData.habitList[index]);
-              //         },
-              //       ),
-              //     );
-              //   },
-              // ),
               SizedBox(
                 height: 20,
               ),
@@ -176,19 +142,6 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
             },
             valueListenable: HabitBox.getHabitBox().listenable(),
           ),
-          // Consumer<HabitTrackerProvider>(
-          //   builder: (BuildContext context, data, Widget? child) {
-          //     return ListView.builder(
-          //       shrinkWrap: true,
-          //       itemCount: data.completedHabitList.length,
-          //       itemBuilder: (BuildContext context, int index) {
-          //         return CompletedHabitCard(
-          //           completedHabit: data.completedHabitList[index],
-          //         );
-          //       },
-          //     );
-          //   },
-          // ),
         ],
       ),
     );
@@ -211,7 +164,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
               ),
             ),
             Text(
-              "Ayush",
+              Prefrences.getuserName(),
               style: TextStyle(
                 fontSize: devicewidth! / 10,
                 color: Colors.purple.shade100,

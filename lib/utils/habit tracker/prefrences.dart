@@ -21,4 +21,14 @@ class Prefrences {
     String dateNow = DateFormat('dd-MM-yyyy').format(date);
     preferences!.setString("currentDate", dateNow);
   }
+
+  static void saveName(String name) async {
+    preferences!.setString("username", name);
+  }
+
+  static String getuserName() {
+    String? date = preferences!.getString("username");
+
+    return date ?? "";
+  }
 }
