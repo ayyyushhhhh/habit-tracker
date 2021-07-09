@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.time_table">
+    package="com.scarecrowhouse.activity_tracker">
    <application
-        android:label="time_table"
+        android:label="Habit Tracker"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

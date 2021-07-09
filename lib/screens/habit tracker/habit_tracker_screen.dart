@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:time_table/Widgets/habit%20tracker/add_habit_card.dart';
 import 'package:time_table/Widgets/habit%20tracker/completed_habit_card.dart';
 import 'package:time_table/Widgets/habit%20tracker/habit_card.dart';
@@ -10,6 +12,7 @@ import 'package:time_table/screens/habit%20tracker/habit_summary_screen.dart';
 import 'package:time_table/utils/habit%20tracker/habit_tracker_colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:time_table/utils/habit%20tracker/prefrences.dart';
+import 'package:time_table/utils/habit%20tracker/theme_provider.dart';
 
 class HabitTrackerScreen extends StatefulWidget {
   @override
@@ -65,7 +68,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                       itemCount: habits.length + 1,
                       itemBuilder: (BuildContext context, int index) {
                         if (index == habits.length) {
-                          return GestureDetector(
+                          return InkWell(
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -76,7 +79,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                               },
                               child: InkWell(child: AddHabitcard()));
                         }
-                        return GestureDetector(
+                        return InkWell(
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -106,45 +109,44 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
 
   Widget _progressContainer() {
     return Container(
-      margin: EdgeInsets.only(top: 0, right: 20, left: 20, bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Today's Progress",
-            style: TextStyle(
-                fontSize: 34,
-                color: Colors.purpleAccent.shade100,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          ValueListenableBuilder<Box<Habit>>(
-            builder: (BuildContext context, box, Widget? child) {
-              final habits = box.values.toList().cast<Habit>();
-              habits.retainWhere((habit) {
-                if (habit.isDone == true) {
-                  return true;
-                } else {
-                  return false;
-                }
-              });
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: habits.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return CompletedHabitCard(
-                    completedHabit: habits[index],
-                  );
-                },
-              );
-            },
-            valueListenable: HabitBox.getHabitBox().listenable(),
-          ),
-        ],
-      ),
-    );
+        margin: EdgeInsets.only(top: 0, right: 20, left: 20, bottom: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Today's Progress",
+              style: TextStyle(
+                  fontSize: 34,
+                  color: Colors.purpleAccent.shade100,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ValueListenableBuilder<Box<Habit>>(
+              builder: (BuildContext context, box, Widget? child) {
+                final habits = box.values.toList().cast<Habit>();
+                habits.retainWhere((habit) {
+                  if (habit.isDone == true) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                });
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: habits.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return CompletedHabitCard(
+                      completedHabit: habits[index],
+                    );
+                  },
+                );
+              },
+              valueListenable: HabitBox.getHabitBox().listenable(),
+            ),
+          ],
+        ));
   }
 
   Align _headWidget() {
@@ -152,25 +154,55 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
       alignment: Alignment.centerLeft,
       child: Container(
         margin: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Hello ,",
-              style: TextStyle(
-                fontSize: devicewidth! / 10,
-                color: kHeadingTextColor,
-                fontWeight: FontWeight.bold,
+            Container(
+              width: devicewidth! / 1.8,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Hello ,",
+                    style: TextStyle(
+                      fontSize: devicewidth! / 12,
+                      color: kHeadingTextColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    Prefrences.getuserName(),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: devicewidth! / 12,
+                      color: Colors.purpleAccent.shade100,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ],
               ),
             ),
-            Text(
-              Prefrences.getuserName(),
-              style: TextStyle(
-                fontSize: devicewidth! / 10,
-                color: Colors.purple.shade100,
-                fontWeight: FontWeight.bold,
-              ),
-            )
+            Consumer<ThemeManager>(
+                builder: (BuildContext context, theme, Widget? child) {
+              return Row(
+                children: [
+                  Icon(Prefrences.getSavedTheme() == 0
+                      ? Icons.dark_mode
+                      : Icons.light_mode),
+                  CupertinoSwitch(
+                    value: Prefrences.getSavedTheme() == 0 ? true : false,
+                    onChanged: (value) {
+                      Prefrences.saveTheme(value ? 1 : 0);
+                      if (value == false) {
+                        theme.updateTheme(ThemeType.LightTheme);
+                      } else {
+                        theme.updateTheme(ThemeType.DarkTheme);
+                      }
+                    },
+                  ),
+                ],
+              );
+            }),
           ],
         ),
       ),

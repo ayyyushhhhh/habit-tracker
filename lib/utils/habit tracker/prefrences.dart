@@ -31,4 +31,13 @@ class Prefrences {
 
     return date ?? "";
   }
+
+  static void saveTheme(int themeIndex) async {
+    preferences!.setInt("themeindex", themeIndex);
+  }
+
+  static int getSavedTheme() {
+    int? index = preferences!.getInt("themeindex");
+    return index ?? 0;
+  }
 }

@@ -23,7 +23,9 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
     widget.habit.completedDates!.forEach((date) {
       selectedEvents[date] = ["Completed"];
     });
-    print(selectedEvents);
+    widget.habit.skipDates!.forEach((date) {
+      selectedEvents[date] = ["Skiped"];
+    });
   }
 
   List<String> _getCompletedEvents(DateTime date) {
@@ -35,6 +37,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -114,7 +117,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                           ),
                           Text(
                             "--- Habit Complete Dates",
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 20, color: Colors.green),
                           ),
                         ],
                       ),
@@ -134,7 +137,8 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                           ),
                           Text(
                             "--- Habit Skip Dates",
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(
+                                fontSize: 20, color: Colors.redAccent),
                           ),
                         ],
                       ),

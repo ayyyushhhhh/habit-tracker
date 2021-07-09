@@ -1,4 +1,4 @@
-package com.example.time_table
+package com.scarecrowhouse.activity_tracker
 
 import io.flutter.embedding.android.FlutterActivity
 

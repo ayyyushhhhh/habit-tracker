@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,10 +24,12 @@ class _AddNameScreenState extends State<AddNameScreen> {
             onPressed: () {
               if (userName != null && userName != "") {
                 Prefrences.saveName(userName.toString());
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return HabitTrackerScreen();
-                }));
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return HabitTrackerScreen();
+                  }),
+                );
               } else {
                 showDialog(
                   context: context,
@@ -54,54 +55,58 @@ class _AddNameScreenState extends State<AddNameScreen> {
           )
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Container(
-            margin: EdgeInsets.all(20),
-            child: SvgPicture.asset(
-              "assets/svg/profile_name.svg",
-              height: 250,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(20),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Please Enter Your Name",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              margin: EdgeInsets.all(20),
+              child: SvgPicture.asset(
+                "assets/svg/profile_name.svg",
+                height: 250,
               ),
             ),
-          ),
-          Container(
-            height: deviceHeight / 12,
-            width: double.infinity,
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.only(left: 20, right: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.black12,
+            Container(
+              margin: EdgeInsets.all(20),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Please Enter Your Name",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
-            child: TextField(
-              onChanged: (value) {
-                userName = value;
-              },
-              decoration: InputDecoration(
-                  border: InputBorder.none, hintText: "Enter Your First Name "),
-              maxLength: 15,
+            Container(
+              height: deviceHeight / 12,
+              width: double.infinity,
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.only(left: 20, right: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.black12,
+              ),
+              child: TextField(
+                onChanged: (value) {
+                  userName = value;
+                },
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(10),
+                    border: InputBorder.none,
+                    hintText: "Enter Your First Name "),
+                maxLength: 10,
+              ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
-              height: 20,
-              color: Colors.red,
-            ),
-          )
-        ],
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                height: 20,
+                color: Colors.red,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -31,6 +31,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
     final deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(deviceHeight / 8),
           child: Text(
@@ -66,8 +67,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   onChanged: (value) {
                     habitTitle = value;
                   },
-                  autofocus: true,
                   decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
                       border: InputBorder.none,
                       hintText: "Enter Habit title eg,Running"),
                   maxLength: 10,
@@ -93,8 +94,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   onChanged: (value) {
                     description = value;
                   },
-                  autofocus: true,
                   decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
                       border: InputBorder.none,
                       hintText: "Add a little description eg, run 10 km "),
                   maxLength: 20,
@@ -155,6 +156,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               _iconGenerator(icon: "🏃‍♂️"),
               _iconGenerator(icon: "🚴‍♂️"),
               _iconGenerator(icon: "✈"),
+              _iconGenerator(icon: "📴"),
             ],
           ),
           Row(
@@ -164,6 +166,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               _iconGenerator(icon: "💤"),
               _iconGenerator(icon: "🍴"),
               _iconGenerator(icon: "🍪"),
+              _iconGenerator(icon: "🛍"),
             ],
           ),
           Row(
@@ -173,6 +176,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               _iconGenerator(icon: "💕"),
               _iconGenerator(icon: "🧘‍♂️"),
               _iconGenerator(icon: "🚿"),
+              _iconGenerator(icon: "🍔"),
             ],
           ),
           Row(
@@ -182,6 +186,17 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               _iconGenerator(icon: "📝"),
               _iconGenerator(icon: "🎸"),
               _iconGenerator(icon: "⚽"),
+              _iconGenerator(icon: "🎨"),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _iconGenerator(icon: "📸"),
+              _iconGenerator(icon: "🛒"),
+              _iconGenerator(icon: "🎮"),
+              _iconGenerator(icon: "🤳"),
+              _iconGenerator(icon: "🏍"),
             ],
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:time_table/hive%20boxes/habit_box.dart';
 import 'package:time_table/models/habit_tracker/habit_model.dart';
 import 'package:time_table/screens/habit%20tracker/add_name_screen.dart';
@@ -7,6 +8,7 @@ import 'package:time_table/screens/habit%20tracker/habit_tracker_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:time_table/utils/habit%20tracker/prefrences.dart';
+import 'package:time_table/utils/habit%20tracker/theme_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +36,8 @@ class MyApp extends StatelessWidget {
     if (Prefrences.getDate() !=
         DateFormat('dd-MM-yyyy').format(DateTime.now())) {
       DateTime previousDate = DateTime.now().subtract(Duration(days: 1));
-
+      previousDate =
+          DateTime(previousDate.year, previousDate.month, previousDate.day);
       final myBox = HabitBox.getHabitBox();
       List<Habit> allHabits = myBox.values.toList().cast<Habit>();
       allHabits.forEach((habit) {
@@ -58,16 +61,18 @@ class MyApp extends StatelessWidget {
     _saveSkipDates();
     _resetSavedData();
 
-    return MaterialApp(
-      title: 'Habit Tracker',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
-        textTheme:
-            ThemeData.dark().textTheme.apply(fontFamily: "San Francisco"),
+    return ChangeNotifierProvider<ThemeManager>(
+      create: (context) => ThemeManager(),
+      child: Consumer<ThemeManager>(
+        builder: (BuildContext context, value, Widget? child) => MaterialApp(
+          title: 'Habit Tracker',
+          debugShowCheckedModeBanner: false,
+          theme: value.appTheme,
+          home: Prefrences.getuserName() == ""
+              ? AddNameScreen()
+              : HabitTrackerScreen(),
+        ),
       ),
-      home: Prefrences.getuserName() == ""
-          ? AddNameScreen()
-          : HabitTrackerScreen(),
     );
   }
 }
