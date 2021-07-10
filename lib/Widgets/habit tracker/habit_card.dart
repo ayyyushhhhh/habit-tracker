@@ -24,7 +24,7 @@ class _HabitCardState extends State<HabitCard> {
       DateTime date = new DateTime(now.year, now.month, now.day);
       habitbox.put(
         widget.habit.title,
-        widget.habit.updateWith(isCompleted: true, completeDate: date),
+        widget.habit.updateWith(completeDate: date),
       );
     });
   }

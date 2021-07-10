@@ -35,6 +35,40 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
     Hive.close();
   }
 
+  Habit calculateStreak({
+    required Habit habit,
+  }) {
+    int index = habit.index!;
+    int lastIndex = habit.lastIndex!;
+    int streaks = habit.streaks!;
+    List<DateTime> totalDates = habit.completedDates! + habit.skipDates!;
+    totalDates.sort();
+    for (int i = index; i < totalDates.length; i++) {
+      if (habit.skipDates!.contains(totalDates[i])) {
+        index = i;
+        break;
+      } else {
+        index = totalDates.length;
+      }
+    }
+
+    streaks = index - lastIndex;
+
+    for (int i = index; i < totalDates.length; i++) {
+      if (habit.completedDates!.contains(totalDates[i])) {
+        lastIndex = i;
+        break;
+      }
+    }
+
+    index = lastIndex;
+    final habitbox = HabitBox.getHabitBox();
+    habitbox.put(habit.title,
+        habit.updateWith(streak: streaks, lastIndex: lastIndex, index: index));
+    return habit.updateWith(
+        streak: streaks, lastIndex: lastIndex, index: index);
+  }
+
   @override
   Widget build(BuildContext context) {
     deviceHeight = MediaQuery.of(context).size.height;
@@ -85,7 +119,8 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                                 MaterialPageRoute(
                                     builder: (BuildContext context) {
                                   return HabitSummaryScreen(
-                                      habit: habits[index]);
+                                      habit: calculateStreak(
+                                          habit: habits[index]));
                                 }),
                               );
                             },

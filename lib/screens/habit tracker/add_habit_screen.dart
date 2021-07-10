@@ -19,6 +19,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
           icon: _habitIcon!,
           completedDates: [],
           skipDates: [],
+          index: 0,
+          lastIndex: 0,
+          streaks: 0,
+          dateCreated: DateTime.now(),
           description: description!);
       final habitbox = HabitBox.getHabitBox();
       habitbox.put(habit.title, habit);
