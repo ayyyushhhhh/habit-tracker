@@ -32,33 +32,9 @@ class MyApp extends StatelessWidget {
     }
   }
 
-  void _saveSkipDates() {
-    if (Prefrences.getDate() !=
-        DateFormat('dd-MM-yyyy').format(DateTime.now())) {
-      DateTime previousDate = DateTime.now().subtract(Duration(days: 1));
-      previousDate =
-          DateTime(previousDate.year, previousDate.month, previousDate.day);
-      final myBox = HabitBox.getHabitBox();
-      List<Habit> allHabits = myBox.values.toList().cast<Habit>();
-      allHabits.forEach((habit) {
-        print("${habit.completedDates} + ${habit.skipDates}");
-        if (!habit.completedDates!.contains(previousDate) &&
-            !habit.skipDates!.contains(previousDate)) {
-          myBox.put(
-            habit.title,
-            habit.updateWith(
-              skipDate: previousDate,
-            ),
-          );
-        }
-      });
-    }
-  }
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    _saveSkipDates();
     _resetSavedData();
 
     return ChangeNotifierProvider<ThemeManager>(

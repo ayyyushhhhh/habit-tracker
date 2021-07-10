@@ -17,8 +17,11 @@ class HabitSummaryScreen extends StatefulWidget {
 
 class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
   Map<DateTime, List<String>> selectedEvents = {};
+  late double deviceHeight;
+  late double deviceWidth;
   int diffDate = 0;
   double completeionPecent = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +32,8 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
     widget.habit.skipDates!.forEach((date) {
       selectedEvents[date] = ["Skiped"];
     });
-    completeionPecent = (widget.habit.completedDates!.length) / diffDate * 100;
+    completeionPecent =
+        ((widget.habit.completedDates!.length) / diffDate * 100);
   }
 
   List<String> _getCompletedEvents(DateTime date) {
@@ -39,9 +43,8 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size.height;
-    final deviceWidth = MediaQuery.of(context).size.width;
-
+    deviceHeight = MediaQuery.of(context).size.height;
+    deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -68,7 +71,6 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: deviceHeight / 10,
                 margin: EdgeInsets.only(bottom: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +131,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                         headColor: Colors.red),
                     _buildDataRow(
                         head: 'Completion Percentage',
-                        data: "$completeionPecent %",
+                        data: "${completeionPecent.toStringAsFixed(2)} %",
                         headColor: Colors.amberAccent),
                     Container(
                       margin: EdgeInsets.only(top: 5),
@@ -138,7 +140,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                             ? "You are a warrior fight back for the right track"
                             : "Persitence is the key, You are on the right track",
                         style: TextStyle(
-                            fontSize: 24,
+                            fontSize: deviceHeight / 24,
                             fontWeight: FontWeight.w700,
                             color: completeionPecent < 30
                                 ? Colors.redAccent
@@ -155,8 +157,11 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
     );
   }
 
-  Container _buildDataRow(
-      {required String head, required dynamic data, required Color headColor}) {
+  Container _buildDataRow({
+    required String head,
+    required dynamic data,
+    required Color headColor,
+  }) {
     return Container(
       margin: EdgeInsets.only(top: 5),
       child: Row(
@@ -165,12 +170,16 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
           Text(
             head,
             style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.w600, color: headColor),
+                fontSize: deviceHeight / 30,
+                fontWeight: FontWeight.w600,
+                color: headColor),
           ),
           Text(
             data.toString(),
             style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.w500, color: headColor),
+                fontSize: deviceHeight / 30,
+                fontWeight: FontWeight.w500,
+                color: headColor),
           ),
         ],
       ),
@@ -255,7 +264,6 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
 
   Container _habitCalendar(double deviceHeight, double deviceWidth) {
     return Container(
-      height: deviceHeight / 1.9,
       width: deviceWidth,
       decoration: BoxDecoration(
         color: Colors.purpleAccent.shade100,

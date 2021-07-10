@@ -38,6 +38,20 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
   Habit calculateStreak({
     required Habit habit,
   }) {
+    final habitbox = HabitBox.getHabitBox();
+
+    int diff = DateTime.now().difference(habit.dateCreated!).inDays;
+
+    for (int i = diff; i > 0; i--) {
+      DateTime lastDate = DateTime.now().subtract(Duration(days: i));
+      lastDate = DateTime(lastDate.year, lastDate.month, lastDate.day);
+      print(lastDate);
+      if (!habit.skipDates!.contains(lastDate) &&
+          !habit.completedDates!.contains(lastDate)) {
+        habit = habit.updateWith(skipDate: lastDate);
+      }
+    }
+
     int index = habit.index!;
     int lastIndex = habit.lastIndex!;
     int streaks = habit.streaks!;
@@ -62,7 +76,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
     }
 
     index = lastIndex;
-    final habitbox = HabitBox.getHabitBox();
+
     habitbox.put(habit.title,
         habit.updateWith(streak: streaks, lastIndex: lastIndex, index: index));
     return habit.updateWith(
@@ -95,7 +109,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                 builder: (BuildContext context, box, Widget? child) {
                   final habits = box.values.toList().cast<Habit>();
                   return Container(
-                    height: deviceHeight! / 3,
+                    height: deviceHeight! / 2.5,
                     child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,

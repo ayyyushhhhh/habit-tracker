@@ -14,19 +14,19 @@ class HabitCard extends StatefulWidget {
 
 class _HabitCardState extends State<HabitCard> {
   void toggleDoneHabit() {
-    setState(() {
-      // final habitProv =
-      //     Provider.of<HabitTrackerProvider>(context, listen: false);
-      // habitProv.addHabitsToCompletedList(habit: widget.habit);
-      widget.habit.isDone = true;
-      final habitbox = HabitBox.getHabitBox();
-      DateTime now = new DateTime.now();
-      DateTime date = new DateTime(now.year, now.month, now.day);
-      habitbox.put(
-        widget.habit.title,
-        widget.habit.updateWith(completeDate: date),
-      );
-    });
+    if (widget.habit.isDone == false) {
+      setState(() {
+        widget.habit.isDone = true;
+
+        final habitbox = HabitBox.getHabitBox();
+        DateTime now = new DateTime.now();
+        DateTime date = new DateTime(now.year, now.month, now.day);
+        habitbox.put(
+          widget.habit.title,
+          widget.habit.updateWith(completeDate: date),
+        );
+      });
+    }
   }
 
   @override
@@ -77,7 +77,7 @@ class _HabitCardState extends State<HabitCard> {
               child: IconButton(
                 onPressed: toggleDoneHabit,
                 icon: Icon(Icons.check_circle),
-                iconSize: deviceHeight / 20,
+                iconSize: deviceHeight / 15,
                 color: widget.habit.isDone == false
                     ? Colors.grey
                     : Colors.green.shade900,

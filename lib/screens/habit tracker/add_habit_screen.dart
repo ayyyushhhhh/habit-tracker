@@ -60,20 +60,18 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                 height: 10,
               ),
               Container(
-                height: MediaQuery.of(context).size.height / 12,
                 width: double.infinity,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.black12,
-                ),
                 child: TextField(
                   onChanged: (value) {
                     habitTitle = value;
                   },
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(10),
-                      border: InputBorder.none,
+                      fillColor: Colors.black12,
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide.none),
                       hintText: "Enter Habit title eg,Running"),
                   maxLength: 10,
                 ),
@@ -87,20 +85,18 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                 height: 10,
               ),
               Container(
-                height: deviceHeight / 12,
                 width: double.infinity,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.black12,
-                ),
                 child: TextField(
                   onChanged: (value) {
                     description = value;
                   },
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(10),
-                      border: InputBorder.none,
+                      fillColor: Colors.black12,
+                      filled: true,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide.none),
                       hintText: "Add a little description eg, run 10 km "),
                   maxLength: 20,
                 ),
@@ -219,7 +215,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
         margin: EdgeInsets.all(5),
         child: Text(
           icon,
-          style: TextStyle(fontSize: _habitIcon == icon ? 50 : 34),
+          style: TextStyle(fontSize: _habitIcon == icon ? 50 : 30),
         ),
       ),
     );

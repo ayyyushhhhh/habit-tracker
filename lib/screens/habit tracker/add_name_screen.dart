@@ -16,7 +16,6 @@ class _AddNameScreenState extends State<AddNameScreen> {
   String? userName;
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -79,25 +78,27 @@ class _AddNameScreenState extends State<AddNameScreen> {
               ),
             ),
             Container(
-              height: deviceHeight / 12,
               width: double.infinity,
-              padding: EdgeInsets.all(10),
               margin: EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Colors.black12,
               ),
               child: TextField(
                 onChanged: (value) {
                   userName = value;
                 },
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(20),
+                    fillColor: Colors.black12,
+                    filled: true,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none),
                     hintText: "Enter Your First Name "),
                 maxLength: 10,
               ),
             ),
+            SizedBox(height: 5),
             Align(
               alignment: Alignment.bottomRight,
               child: Container(
