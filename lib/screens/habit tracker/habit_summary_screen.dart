@@ -60,7 +60,9 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
           child: Text(
             "Habit Summary",
             style: TextStyle(
-                fontSize: deviceHeight / 16, fontWeight: FontWeight.w800),
+                fontSize: deviceWidth / 10,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.2),
           ),
         ),
       ),
@@ -68,8 +70,23 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
         child: Container(
           margin: EdgeInsets.all(20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Image.asset(
+                widget.habit.icon,
+                height: deviceHeight / 5,
+                width: deviceHeight / 5,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                widget.habit.title,
+                style: TextStyle(
+                    fontSize: deviceWidth / 15,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.purpleAccent.shade100),
+              ),
               Container(
                 margin: EdgeInsets.only(bottom: 10),
                 child: Column(
@@ -78,7 +95,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                     Text(
                       "It takes 21 Days to create Habit.",
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: deviceWidth / 15,
                           fontWeight: FontWeight.w800,
                           color: kHeadingTextColor),
                     ),
@@ -88,7 +105,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                     Text(
                       "You are on ${widget.habit.streaks} day(s) streak to create a habit.",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: deviceWidth / 15,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -104,47 +121,54 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                 width: deviceWidth,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
+                  color: Color(0xFF03C8FE),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
+                      margin: EdgeInsets.only(top: 10),
                       child: Text(
                         "Since, ${DateFormat.yMMMMd('en_US').format(widget.habit.dateCreated!)}",
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                            fontSize: deviceWidth / 15,
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     _buildDataRow(
                       head: 'Total Days',
                       data: diffDate,
-                      headColor: Colors.blueAccent,
+                      headColor: Colors.blueAccent.shade700,
                     ),
                     _buildDataRow(
                         head: 'Completed Days',
                         data: widget.habit.completedDates!.length,
-                        headColor: Colors.green),
+                        headColor: Colors.green.shade900),
                     _buildDataRow(
                         head: 'Skiped Days',
                         data: widget.habit.skipDates!.length,
-                        headColor: Colors.red),
+                        headColor: Colors.red.shade900),
                     _buildDataRow(
                         head: 'Completion Percentage',
                         data: "${completeionPecent.toStringAsFixed(2)} %",
                         headColor: Colors.amberAccent),
-                    Container(
-                      margin: EdgeInsets.only(top: 5),
-                      child: Text(
-                        completeionPecent < 30
-                            ? "You are a warrior fight back for the right track"
-                            : "Persitence is the key, You are on the right track",
-                        style: TextStyle(
-                            fontSize: deviceHeight / 24,
-                            fontWeight: FontWeight.w700,
-                            color: completeionPecent < 30
-                                ? Colors.redAccent
-                                : Colors.lightGreenAccent),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 5),
+                        child: Text(
+                          completeionPecent < 30
+                              ? "You are a warrior fight back for the right track."
+                              : "Persitence is the key, You are on the right track.",
+                          style: TextStyle(
+                              fontSize: deviceWidth / 20,
+                              fontWeight: FontWeight.w700,
+                              color: completeionPecent < 30
+                                  ? Colors.redAccent
+                                  : Colors.lightGreenAccent),
+                        ),
                       ),
                     ),
                   ],
@@ -170,14 +194,14 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
           Text(
             head,
             style: TextStyle(
-                fontSize: deviceHeight / 30,
+                fontSize: deviceWidth / 20,
                 fontWeight: FontWeight.w600,
                 color: headColor),
           ),
           Text(
             data.toString(),
             style: TextStyle(
-                fontSize: deviceHeight / 30,
+                fontSize: deviceWidth / 20,
                 fontWeight: FontWeight.w500,
                 color: headColor),
           ),
@@ -189,46 +213,51 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
   Container calendarMarkers() {
     return Container(
       margin: EdgeInsets.only(top: 10),
-      height: 70,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              Container(
-                height: 20,
-                width: 20,
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Colors.green),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Text(
-                "--- Habit Complete Dates",
-                style: TextStyle(fontSize: 20, color: Colors.green),
-              ),
-            ],
+          Container(
+            child: Row(
+              children: [
+                Container(
+                  height: 20,
+                  width: 20,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: Colors.green),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  "--- Habit Complete Dates",
+                  style: TextStyle(
+                      fontSize: deviceWidth / 20, color: Colors.green),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: 10,
           ),
-          Row(
-            children: [
-              Container(
-                height: 20,
-                width: 20,
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Text(
-                "--- Habit Skip Dates",
-                style: TextStyle(fontSize: 20, color: Colors.redAccent),
-              ),
-            ],
+          Container(
+            child: Row(
+              children: [
+                Container(
+                  height: 20,
+                  width: 20,
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  "--- Habit Skip Dates",
+                  style: TextStyle(
+                      fontSize: deviceWidth / 20, color: Colors.redAccent),
+                ),
+              ],
+            ),
           ),
         ],
       ),

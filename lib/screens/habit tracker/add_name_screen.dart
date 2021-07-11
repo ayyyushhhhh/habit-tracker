@@ -84,6 +84,7 @@ class _AddNameScreenState extends State<AddNameScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TextField(
+                keyboardType: TextInputType.text,
                 onChanged: (value) {
                   userName = value;
                 },

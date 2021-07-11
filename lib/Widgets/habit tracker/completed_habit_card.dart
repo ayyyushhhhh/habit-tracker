@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:time_table/models/habit_tracker/habit_model.dart';
 
@@ -12,9 +14,9 @@ class CompletedHabitCard extends StatelessWidget {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: deviceHeight / 10,
       width: deviceWidth,
       margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: kHeadingTextColor,
@@ -26,9 +28,10 @@ class CompletedHabitCard extends StatelessWidget {
           SizedBox(
             width: 10,
           ),
-          Text(
+          Image.asset(
             completedHabit.icon,
-            style: TextStyle(fontSize: deviceHeight / 16),
+            height: deviceHeight / 10,
+            width: deviceHeight / 10,
           ),
           SizedBox(
             width: 20,
@@ -41,7 +44,7 @@ class CompletedHabitCard extends StatelessWidget {
                 completedHabit.title,
                 style: TextStyle(
                     decoration: TextDecoration.lineThrough,
-                    fontSize: deviceHeight / 33,
+                    fontSize: deviceWidth / 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
               ),
@@ -52,7 +55,7 @@ class CompletedHabitCard extends StatelessWidget {
                 completedHabit.description,
                 style: TextStyle(
                     decoration: TextDecoration.lineThrough,
-                    fontSize: deviceHeight / 57,
+                    fontSize: deviceWidth / 22,
                     color: Colors.white),
               ),
             ],

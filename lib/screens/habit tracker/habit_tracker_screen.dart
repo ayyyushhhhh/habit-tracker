@@ -45,7 +45,6 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
     for (int i = diff; i > 0; i--) {
       DateTime lastDate = DateTime.now().subtract(Duration(days: i));
       lastDate = DateTime(lastDate.year, lastDate.month, lastDate.day);
-      print(lastDate);
       if (!habit.skipDates!.contains(lastDate) &&
           !habit.completedDates!.contains(lastDate)) {
         habit = habit.updateWith(skipDate: lastDate);
@@ -109,7 +108,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                 builder: (BuildContext context, box, Widget? child) {
                   final habits = box.values.toList().cast<Habit>();
                   return Container(
-                    height: deviceHeight! / 2.5,
+                    height: deviceHeight! / 2.2,
                     child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,

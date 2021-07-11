@@ -11,6 +11,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   String? _habitIcon;
   String? habitTitle;
   String? description;
+  String location = "assets/icons/";
 
   void _saveHabit() {
     if (habitTitle != null && _habitIcon != null && description != null) {
@@ -62,6 +63,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               Container(
                 width: double.infinity,
                 child: TextField(
+                  keyboardType: TextInputType.text,
                   onChanged: (value) {
                     habitTitle = value;
                   },
@@ -87,6 +89,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
               Container(
                 width: double.infinity,
                 child: TextField(
+                  keyboardType: TextInputType.text,
                   onChanged: (value) {
                     description = value;
                   },
@@ -152,51 +155,37 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _iconGenerator(icon: "📖"),
-              _iconGenerator(icon: "🏃‍♂️"),
-              _iconGenerator(icon: "🚴‍♂️"),
-              _iconGenerator(icon: "✈"),
-              _iconGenerator(icon: "📴"),
+              _iconGenerator(icon: "${location}gmail.png"),
+              _iconGenerator(icon: "${location}no-junk-food.png"),
+              _iconGenerator(icon: "${location}fitness.png"),
+              _iconGenerator(icon: "${location}yoga.png"),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _iconGenerator(icon: "🥛"),
-              _iconGenerator(icon: "💤"),
-              _iconGenerator(icon: "🍴"),
-              _iconGenerator(icon: "🍪"),
-              _iconGenerator(icon: "🛍"),
+              _iconGenerator(icon: "${location}water.png"),
+              _iconGenerator(icon: "${location}running.png"),
+              _iconGenerator(icon: "${location}sleeping.png"),
+              _iconGenerator(icon: "${location}no-smartphones.png"),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _iconGenerator(icon: "👩‍💻"),
-              _iconGenerator(icon: "💕"),
-              _iconGenerator(icon: "🧘‍♂️"),
-              _iconGenerator(icon: "🚿"),
-              _iconGenerator(icon: "🍔"),
+              _iconGenerator(icon: "${location}controller.png"),
+              _iconGenerator(icon: "${location}shower.png"),
+              _iconGenerator(icon: "${location}take-a-photo.png"),
+              _iconGenerator(icon: "${location}sport.png"),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _iconGenerator(icon: "🎶"),
-              _iconGenerator(icon: "📝"),
-              _iconGenerator(icon: "🎸"),
-              _iconGenerator(icon: "⚽"),
-              _iconGenerator(icon: "🎨"),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _iconGenerator(icon: "📸"),
-              _iconGenerator(icon: "🛒"),
-              _iconGenerator(icon: "🎮"),
-              _iconGenerator(icon: "🤳"),
-              _iconGenerator(icon: "🏍"),
+              _iconGenerator(icon: "${location}music.png"),
+              _iconGenerator(icon: "${location}study.png"),
+              _iconGenerator(icon: "${location}coding.png"),
+              _iconGenerator(icon: "${location}travel-luggage.png"),
             ],
           ),
         ],
@@ -213,9 +202,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
       },
       child: Container(
         margin: EdgeInsets.all(5),
-        child: Text(
+        child: Image.asset(
           icon,
-          style: TextStyle(fontSize: _habitIcon == icon ? 50 : 30),
+          height: _habitIcon == icon ? 60 : 40,
+          width: _habitIcon == icon ? 60 : 40,
         ),
       ),
     );

@@ -35,7 +35,7 @@ class _HabitCardState extends State<HabitCard> {
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(
       margin: EdgeInsets.all(20),
-      height: deviceHeight / 15,
+      height: deviceHeight / 10,
       width: deviceWidth / 2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -46,11 +46,10 @@ class _HabitCardState extends State<HabitCard> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
+            Image.asset(
               widget.habit.icon,
-              style: TextStyle(
-                fontSize: deviceHeight / 13.5,
-              ),
+              width: deviceHeight / 8,
+              height: deviceHeight / 8,
             ),
             Text(
               widget.habit.title,
@@ -62,12 +61,16 @@ class _HabitCardState extends State<HabitCard> {
             SizedBox(
               height: 5,
             ),
-            Text(
-              widget.habit.description,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white),
+            Container(
+              padding: EdgeInsets.all(4),
+              child: Text(
+                widget.habit.description,
+                maxLines: 2,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
             ),
             SizedBox(
               height: 2,
