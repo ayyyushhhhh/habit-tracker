@@ -56,26 +56,30 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
     int streaks = habit.streaks!;
     List<DateTime> totalDates = habit.completedDates! + habit.skipDates!;
     totalDates.sort();
-    for (int i = index; i < totalDates.length; i++) {
-      if (habit.skipDates!.contains(totalDates[i])) {
-        index = i;
-        break;
-      } else {
-        index = totalDates.length;
+
+    if (habit.skipDates!.contains(totalDates.last) && totalDates.length != 0) {
+      streaks = 0;
+    } else {
+      for (int i = index; i < totalDates.length; i++) {
+        if (habit.skipDates!.contains(totalDates[i])) {
+          index = i;
+          break;
+        } else {
+          index = totalDates.length;
+        }
       }
-    }
 
-    streaks = index - lastIndex;
+      streaks = index - lastIndex;
 
-    for (int i = index; i < totalDates.length; i++) {
-      if (habit.completedDates!.contains(totalDates[i])) {
-        lastIndex = i;
-        break;
+      for (int i = index; i < totalDates.length; i++) {
+        if (habit.completedDates!.contains(totalDates[i])) {
+          lastIndex = i;
+          break;
+        }
       }
+
+      index = lastIndex;
     }
-
-    index = lastIndex;
-
     habitbox.put(habit.title,
         habit.updateWith(streak: streaks, lastIndex: lastIndex, index: index));
     return habit.updateWith(
