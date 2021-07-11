@@ -57,7 +57,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
     List<DateTime> totalDates = habit.completedDates! + habit.skipDates!;
     totalDates.sort();
 
-    if (habit.skipDates!.contains(totalDates.last) && totalDates.length != 0) {
+    if (totalDates.length != 0 && habit.skipDates!.contains(totalDates.last)) {
       streaks = 0;
     } else {
       for (int i = index; i < totalDates.length; i++) {
