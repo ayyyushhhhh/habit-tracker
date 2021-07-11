@@ -12,7 +12,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   String? habitTitle;
   String? description;
   String location = "assets/icons/";
-
+  double deviceWidth = 0;
   void _saveHabit() {
     if (habitTitle != null && _habitIcon != null && description != null) {
       Habit habit = Habit(
@@ -34,6 +34,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
+    deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
@@ -204,8 +205,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
         margin: EdgeInsets.all(5),
         child: Image.asset(
           icon,
-          height: _habitIcon == icon ? 60 : 40,
-          width: _habitIcon == icon ? 60 : 40,
+          height: _habitIcon == icon ? deviceWidth / 6 : deviceWidth / 10,
+          width: _habitIcon == icon ? deviceWidth / 6 : deviceWidth / 10,
         ),
       ),
     );
