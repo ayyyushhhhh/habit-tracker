@@ -67,13 +67,21 @@ class _HabitCardState extends State<HabitCard> {
                 widget.habit.description,
                 maxLines: 2,
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: deviceWidth / 22,
                     fontWeight: FontWeight.w500,
                     color: Colors.white),
               ),
             ),
             SizedBox(
               height: 2,
+            ),
+            Container(
+              child: Text(
+                "(Click here for details)",
+                style:
+                    TextStyle(fontSize: deviceWidth / 30, color: Colors.blue),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             Align(
               alignment: Alignment.bottomRight,
