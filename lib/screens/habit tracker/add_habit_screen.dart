@@ -106,7 +106,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                 ),
               ),
               Text(
-                "Chose an Icon",
+                "Choose an Icon",
                 style: TextStyle(
                     fontSize: deviceHeight / 32, fontWeight: FontWeight.bold),
               ),
