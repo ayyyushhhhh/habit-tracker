@@ -1,12 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:time_table/Widgets/time%20blocker/time_block_card.dart';
-import 'package:time_table/hive%20boxes/task_boxes.dart';
 import 'package:time_table/models/time_blocker/time_block_model.dart';
 import 'package:time_table/screens/time%20blocker/add_block_screen.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:time_table/utils/time%20block/time_block_prefrences.dart';
 
 class TimeBlockerScreen extends StatefulWidget {
   @override
@@ -21,80 +21,85 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
       child: Scaffold(
         body: Container(
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Text(
-                        'Let\'s Start by  \nPlanning Your Day ',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Text(
+                      'Let\'s Start by  \nPlanning Your Day ',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return AddBlockScreen();
+                      }));
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.teal,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Add Task",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          return new AddBlockScreen();
-                        }));
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.teal,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Add Task",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                _buildCalendar(),
-                SizedBox(
-                  height: 20,
-                ),
-                ValueListenableBuilder<Box<List<TimeBlockModel>>>(
-                  builder: (BuildContext context, dayTasks, Widget? child) {
-                    final tasks = dayTasks
-                        .get(DateFormat.yMMMMd('en_US').format(_selectedDate));
-                    if (tasks != null) {
-                      tasks.cast<List<TimeBlockModel>>();
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return TimeBlockCard(blockTask: tasks[index]);
-                        },
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              _buildCalendar(),
+              SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                child: Consumer<TasksNotifier>(
+                  builder: (BuildContext context, value, Widget? child) {
+                    List<String> tasks = value.tasksList;
+                    tasks = TasksData.getSavedTask(
+                        DateFormat.yMMMMd('en_US').format(
+                      _selectedDate,
+                    ));
+
+                    if (tasks.isEmpty) {
+                      return Center(
+                        child: Text("No Work Today"),
                       );
                     } else {
-                      return Center(
-                        child: Text("No Task Today"),
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: tasks.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Tasks task =
+                              Tasks.fromJson(json.decode(tasks[index]));
+                          return TimeBlockCard(blockTask: task);
+                        },
                       );
                     }
                   },
-                  valueListenable: TaskBox.getTaskBox().listenable(),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

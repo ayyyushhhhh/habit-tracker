@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:time_table/hive%20boxes/task_boxes.dart';
+import 'package:provider/provider.dart';
 import 'package:time_table/models/time_blocker/time_block_model.dart';
+import 'package:time_table/utils/time%20block/time_block_prefrences.dart';
 
 enum TimeType { StartTime, EndTime }
 
@@ -16,9 +18,9 @@ class AddBlockScreen extends StatefulWidget {
 class _AddBlockScreenState extends State<AddBlockScreen> {
   late TimeOfDay _startTime;
   late TimeOfDay _endTime;
-  String? taskTitle;
-  String? taskDescription;
-  DateTime selectedDate = DateTime.now();
+  String? _taskTitle;
+  String? _taskDescription;
+  DateTime _selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -28,26 +30,20 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
   }
 
   void _saveTask() {
-    print("out");
-    print(taskTitle);
-    print(taskDescription);
-    if (taskTitle != null && taskDescription != null) {
-      print("hey");
-      List<TimeBlockModel> listTasks = [];
-      final TimeBlockModel task = TimeBlockModel(
-          from: _startTime,
-          to: _endTime,
-          taskTitle: taskTitle.toString(),
-          taskDescription: taskDescription.toString());
-      final taskDate = DateFormat.yMd().format(selectedDate);
-      final taskBox = TaskBox.getTaskBox();
-      if (taskBox.get(taskDate) != null) {
-        listTasks = taskBox.get(taskDate)!;
-        listTasks.add(task);
-      } else {
-        listTasks = [task];
-      }
-      taskBox.put(taskDate, listTasks);
+    if (_taskTitle != null && _taskDescription != null) {
+      List<String> taskLists = TasksData.getSavedTask(
+          DateFormat.yMMMMd('en_US').format(_selectedDate));
+      Tasks task = Tasks(
+          from: _startTime.format(context),
+          to: _endTime.format(context),
+          taskTitle: _taskTitle.toString(),
+          taskDescription: _taskDescription.toString());
+      final taskString = jsonEncode(task);
+
+      taskLists.add(taskString);
+      final taskNotifier = Provider.of<TasksNotifier>(context, listen: false);
+      taskNotifier.updateTasksList(
+          DateFormat.yMMMMd('en_US').format(_selectedDate), taskLists);
       Navigator.pop(context);
     }
   }
@@ -109,7 +105,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
   }
 
   Widget _buildDatePicker({required BuildContext context}) {
-    String date = DateFormat.yMMMMd('en_US').format(selectedDate);
+    String date = DateFormat.yMMMMd('en_US').format(_selectedDate);
 
     return Container(
         padding: EdgeInsets.all(16),
@@ -140,11 +136,11 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
                 onPressed: () {
                   showDatePicker(
                           context: context,
-                          initialDate: selectedDate,
+                          initialDate: _selectedDate,
                           firstDate: DateTime(2020, 12, 10),
                           lastDate: DateTime(2025, 12, 10))
                       .then((date) => setState(() {
-                            selectedDate = date as DateTime;
+                            _selectedDate = date as DateTime;
                           }));
                 },
                 icon: Icon(
@@ -209,7 +205,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
               TextField(
                 keyboardType: TextInputType.text,
                 onChanged: (value) {
-                  taskTitle = value;
+                  _taskTitle = value;
                 },
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(20),
@@ -231,7 +227,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
               TextField(
                 keyboardType: TextInputType.text,
                 onChanged: (value) {
-                  taskDescription = value;
+                  _taskDescription = value;
                 },
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(20),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:time_table/models/time_blocker/time_block_model.dart';
 
 class TimeBlockCard extends StatelessWidget {
-  final TimeBlockModel blockTask;
+  final Tasks blockTask;
   const TimeBlockCard({Key? key, required this.blockTask});
 
   @override
@@ -10,6 +10,7 @@ class TimeBlockCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20),
       width: double.infinity,
+      margin: EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -18,7 +19,7 @@ class TimeBlockCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            blockTask.taskTitle,
+            blockTask.taskTitle.toString(),
             style: TextStyle(
                 fontSize: 24,
                 color: Colors.black,
@@ -40,12 +41,12 @@ class TimeBlockCard extends StatelessWidget {
                 width: 10,
               ),
               Text(
-                blockTask.from.format(context),
+                blockTask.from,
                 style: TextStyle(color: Colors.black),
               ),
               Text(" - ", style: TextStyle(color: Colors.black)),
               Text(
-                blockTask.to.format(context),
+                blockTask.to,
                 style: TextStyle(color: Colors.black),
               ),
             ],
@@ -54,7 +55,7 @@ class TimeBlockCard extends StatelessWidget {
             height: 10,
           ),
           Text(
-            blockTask.taskDescription,
+            blockTask.taskDescription.toString(),
             style: TextStyle(
                 fontSize: 16,
                 color: Colors.black,

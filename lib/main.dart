@@ -15,16 +15,15 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:time_table/screens/time%20blocker/time_blocker_screen.dart';
 import 'package:time_table/utils/habit%20tracker/prefrences.dart';
 import 'package:time_table/utils/habit%20tracker/theme_provider.dart';
+import 'package:time_table/utils/time%20block/time_block_prefrences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Directory appDocDir = await getApplicationDocumentsDirectory();
   Prefrences.init();
-  await Hive.initFlutter(appDocDir.path);
+  TasksData.init();
+  await Hive.initFlutter();
   Hive.registerAdapter(HabitAdapter());
-  Hive.registerAdapter(TimeBlockModelAdapter());
   await Hive.openBox<Habit>("Habits");
-  await Hive.openBox<List<TimeBlockModel>>("Tasks");
   runApp(MyApp());
 }
 
@@ -67,11 +66,14 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Time Blocker",
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-      home: TimeBlockerScreen(),
+    return ChangeNotifierProvider<TasksNotifier>(
+      create: (context) => TasksNotifier(),
+      child: MaterialApp(
+        title: "Time Blocker",
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.dark(),
+        home: TimeBlockerScreen(),
+      ),
     );
   }
 }
