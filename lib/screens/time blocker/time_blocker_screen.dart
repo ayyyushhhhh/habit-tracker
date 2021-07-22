@@ -15,8 +15,13 @@ class TimeBlockerScreen extends StatefulWidget {
 
 class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
   DateTime _selectedDate = DateTime.now();
+  double _deviceHeight = 0;
+  double _deviceWidth = 0;
   @override
   Widget build(BuildContext context) {
+    _deviceHeight = MediaQuery.of(context).size.height;
+    _deviceWidth = MediaQuery.of(context).size.width;
+    print(_deviceWidth);
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -32,7 +37,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                       'Let\'s Start by  \nPlanning Your Day ',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: _deviceWidth / 18,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -48,8 +53,8 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                       }));
                     },
                     child: Container(
-                      height: 40,
-                      width: 100,
+                      height: _deviceHeight / 20,
+                      width: _deviceWidth / 4,
                       decoration: BoxDecoration(
                         color: Colors.teal,
                         borderRadius: BorderRadius.circular(20),
@@ -58,7 +63,8 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                         child: Text(
                           "Add Task",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
+                              fontSize: _deviceWidth / 25,
+                              fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
@@ -75,24 +81,26 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
               Expanded(
                 child: Consumer<TasksNotifier>(
                   builder: (BuildContext context, value, Widget? child) {
-                    List<String> tasks = value.tasksList;
-                    tasks = TasksData.getSavedTask(
-                        DateFormat.yMMMMd('en_US').format(
-                      _selectedDate,
-                    ));
+                    List<String> tasks = TasksData.getSavedTask(
+                        DateFormat.yMMMMd("en_US").format(_selectedDate));
 
-                    if (tasks.isEmpty) {
+                    List<Tasks> decodedTasks = [];
+                    tasks.forEach((task) {
+                      decodedTasks.add(Tasks.fromJson(json.decode(task)));
+                    });
+                    decodedTasks.sort((a, b) {
+                      return a.from.compareTo(b.from);
+                    });
+                    if (decodedTasks.isEmpty) {
                       return Center(
                         child: Text("No Work Today"),
                       );
                     } else {
                       return ListView.builder(
                         shrinkWrap: true,
-                        itemCount: tasks.length,
+                        itemCount: decodedTasks.length,
                         itemBuilder: (BuildContext context, int index) {
-                          Tasks task =
-                              Tasks.fromJson(json.decode(tasks[index]));
-                          return TimeBlockCard(blockTask: task);
+                          return TimeBlockCard(blockTask: decodedTasks[index]);
                         },
                       );
                     }
@@ -120,7 +128,11 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
         },
         onDaySelected: (selectedDay, focusedDay) {
           setState(() {
+            final tasksProv =
+                Provider.of<TasksNotifier>(context, listen: false);
             _selectedDate = selectedDay;
+            tasksProv.updateTasksList(
+                DateFormat.yMMMd("en_us").format(_selectedDate));
           });
         },
         calendarBuilders: CalendarBuilders(

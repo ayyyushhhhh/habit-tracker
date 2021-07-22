@@ -20,33 +20,16 @@ class Tasks {
 
   factory Tasks.fromJson(Map<String, dynamic> json) => _$TasksFromJson(json);
   Map<String, dynamic> toJson() => _$TasksToJson(this);
-
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'from': this.from,
-  //     'to': this.to,
-  //     'taskTitle': this.taskTitle,
-  //     'taskDescription': this.taskDescription,
-  //   };
-  // }
-
-  // Tasks.fromJson(Map<String, dynamic> json)
-  //     : from = json["from"],
-  //       to = json["to"],
-  //       taskTitle = json["taskTitle"],
-  //       taskDescription = json["taskDescription"];
 }
 
 class TasksNotifier extends ChangeNotifier {
-  List<String> tasksList = TasksData.getSavedTask(
-    DateFormat.yMMMMd('en_US').format(
-      DateTime.now(),
-    ),
-  );
-
-  void updateTasksList(String date, List<String> tasks) {
+  void saveTasksList(String date, List<String> tasks) {
     TasksData.saveTask(date, tasks);
-    tasksList = TasksData.getSavedTask(date);
+
+    notifyListeners();
+  }
+
+  void updateTasksList(String date) {
     notifyListeners();
   }
 }

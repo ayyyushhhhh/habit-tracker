@@ -21,7 +21,8 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
   String? _taskTitle;
   String? _taskDescription;
   DateTime _selectedDate = DateTime.now();
-
+  double _deviceHeight = 0;
+  double _deviceWidth = 0;
   @override
   void initState() {
     super.initState();
@@ -42,7 +43,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
 
       taskLists.add(taskString);
       final taskNotifier = Provider.of<TasksNotifier>(context, listen: false);
-      taskNotifier.updateTasksList(
+      taskNotifier.saveTasksList(
           DateFormat.yMMMMd('en_US').format(_selectedDate), taskLists);
       Navigator.pop(context);
     }
@@ -72,7 +73,9 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(fontSize: 27, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        fontSize: _deviceWidth / 18,
+                        fontWeight: FontWeight.w600),
                   ),
                   SizedBox(
                     width: 3,
@@ -94,7 +97,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
               child: Container(
                 child: Text(
                   time,
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: _deviceWidth / 20),
                 ),
               ),
             ),
@@ -119,7 +122,8 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
               children: [
                 Text(
                   "Date",
-                  style: TextStyle(fontSize: 27, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      fontSize: _deviceWidth / 16, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(
                   height: 5,
@@ -127,7 +131,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
                 Container(
                   child: Text(
                     date,
-                    style: TextStyle(fontSize: 24),
+                    style: TextStyle(fontSize: _deviceHeight / 18),
                   ),
                 ),
               ],
@@ -140,7 +144,9 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
                           firstDate: DateTime(2020, 12, 10),
                           lastDate: DateTime(2025, 12, 10))
                       .then((date) => setState(() {
-                            _selectedDate = date as DateTime;
+                            if (date != null) {
+                              _selectedDate = date;
+                            }
                           }));
                 },
                 icon: Icon(
@@ -152,24 +158,27 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
   }
 
   _showTimePicker(TimeType selectTimetype, BuildContext context) async {
-    final TimeOfDay picked = await showTimePicker(
+    final TimeOfDay? picked = await showTimePicker(
         context: context,
         initialTime:
             selectTimetype == TimeType.StartTime ? _startTime : _endTime,
         confirmText: "Done",
-        cancelText: "Cancel") as TimeOfDay;
-
-    setState(() {
-      if (selectTimetype == TimeType.StartTime) {
-        _startTime = picked;
-      } else if (selectTimetype == TimeType.EndTime) {
-        _endTime = picked;
-      }
-    });
+        cancelText: "Cancel");
+    if (picked != null) {
+      setState(() {
+        if (selectTimetype == TimeType.StartTime) {
+          _startTime = picked;
+        } else if (selectTimetype == TimeType.EndTime) {
+          _endTime = picked;
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    _deviceHeight = MediaQuery.of(context).size.height;
+    _deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -187,7 +196,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
                 child: Text(
                   'Add a Task',
                   style: TextStyle(
-                      fontSize: 34,
+                      fontSize: _deviceWidth / 10,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
                 ),
@@ -197,7 +206,8 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
               ),
               Text(
                 "Title",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                    fontSize: _deviceWidth / 16, fontWeight: FontWeight.w600),
               ),
               SizedBox(
                 height: 10,
@@ -219,7 +229,8 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
               ),
               Text(
                 "Description",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                    fontSize: _deviceWidth / 16, fontWeight: FontWeight.w600),
               ),
               SizedBox(
                 height: 10,
@@ -281,7 +292,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
                   child: Center(
                     child: Text(
                       "Add Task",
-                      style: TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: _deviceWidth / 10),
                     ),
                   ),
                 ),
