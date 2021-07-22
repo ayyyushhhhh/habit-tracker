@@ -21,7 +21,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
-    print(_deviceWidth);
+
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -47,10 +47,11 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return AddBlockScreen();
-                      }));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (BuildContext context) {
+                          return AddBlockScreen();
+                        }),
+                      );
                     },
                     child: Container(
                       height: _deviceHeight / 20,
@@ -150,14 +151,14 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                       DateFormat.E().format(datetime),
                       style: TextStyle(
                           color: Colors.black45,
-                          fontSize: 16,
+                          fontSize: _deviceWidth / 25,
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
                       DateFormat.d().format(datetime),
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: _deviceWidth / 20,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -175,17 +176,17 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                       DateFormat.E().format(dateTime),
                       style: TextStyle(
                           color: Colors.white70,
-                          fontSize: 16,
+                          fontSize: _deviceWidth / 25,
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 5,
                     ),
                     Text(
                       DateFormat.d().format(dateTime),
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: _deviceWidth / 20,
                           fontWeight: FontWeight.bold),
                     ),
                   ],

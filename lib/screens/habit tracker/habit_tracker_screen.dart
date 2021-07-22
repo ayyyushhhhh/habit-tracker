@@ -32,7 +32,6 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
   @override
   void dispose() {
     super.dispose();
-    Hive.close();
   }
 
   Habit calculateStreak({

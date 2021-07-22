@@ -137,17 +137,16 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
               ],
             ),
             IconButton(
-                onPressed: () {
-                  showDatePicker(
-                          context: context,
-                          initialDate: _selectedDate,
-                          firstDate: DateTime(2020, 12, 10),
-                          lastDate: DateTime(2025, 12, 10))
-                      .then((date) => setState(() {
-                            if (date != null) {
-                              _selectedDate = date;
-                            }
-                          }));
+                onPressed: () async {
+                  final DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: _selectedDate,
+                      firstDate: DateTime(2020, 12, 10),
+                      lastDate: DateTime(2025, 12, 10));
+
+                  if (pickedDate != null) {
+                    _selectedDate = pickedDate;
+                  }
                 },
                 icon: Icon(
                   Icons.calendar_today,
