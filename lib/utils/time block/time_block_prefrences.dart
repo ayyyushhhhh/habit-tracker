@@ -10,6 +10,8 @@ class TasksData {
     tasksPrefrences!.setStringList(date, tasks);
   }
 
+  static void updateTask() {}
+
   static List<String> getSavedTask(String date) {
     final tasksList = tasksPrefrences!.getStringList(date);
     if (tasksList == null) {

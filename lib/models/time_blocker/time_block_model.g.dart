@@ -12,6 +12,7 @@ Tasks _$TasksFromJson(Map<String, dynamic> json) {
     to: json['to'] as String,
     taskTitle: json['taskTitle'] as String,
     taskDescription: json['taskDescription'] as String,
+    isDone: json['isDone'] as bool,
   );
 }
 
@@ -20,4 +21,5 @@ Map<String, dynamic> _$TasksToJson(Tasks instance) => <String, dynamic>{
       'to': instance.to,
       'taskTitle': instance.taskTitle,
       'taskDescription': instance.taskDescription,
+      'isDone': instance.isDone,
     };

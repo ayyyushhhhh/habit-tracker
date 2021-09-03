@@ -61,6 +61,7 @@ flutter:
   assets:
     - assets/svg/
     - assets/icons/
+    - assets/fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -74,10 +75,10 @@ flutter:
   fonts:
     - family: San Francisco
       fonts:
-        - asset: assets\fonts\SF-Pro-Display-Regular.otf
-        - asset: assets\fonts\SF-Pro-Display-RegularItalic.otf
+        - asset: assets/fonts/SF-Pro-Display-Regular.otf
+        - asset: assets/fonts/SF-Pro-Display-RegularItalic.otf
           style: italic
-        - asset: assets\fonts\SF-Pro-Display-Bold.otf
+        - asset: assets/fonts/SF-Pro-Display-Bold.otf
           weight: 700
   #   - family: Trajan Pro
   #     fonts:

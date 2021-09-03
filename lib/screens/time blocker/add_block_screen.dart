@@ -8,8 +8,11 @@ import 'package:time_table/utils/time%20block/time_block_prefrences.dart';
 
 enum TimeType { StartTime, EndTime }
 
+// ignore: must_be_immutable
 class AddBlockScreen extends StatefulWidget {
-  const AddBlockScreen({Key? key}) : super(key: key);
+  AddBlockScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _AddBlockScreenState createState() => _AddBlockScreenState();
@@ -30,7 +33,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
     _endTime = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
   }
 
-  void _saveTask() {
+  void _saveTask(BuildContext context) {
     if (_taskTitle != null && _taskDescription != null) {
       List<String> taskLists = TasksData.getSavedTask(
           DateFormat.yMMMMd('en_US').format(_selectedDate));
@@ -38,7 +41,8 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
           from: _startTime.format(context),
           to: _endTime.format(context),
           taskTitle: _taskTitle.toString(),
-          taskDescription: _taskDescription.toString());
+          taskDescription: _taskDescription.toString(),
+          isDone: false);
       final taskString = jsonEncode(task);
 
       taskLists.add(taskString);
@@ -131,7 +135,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
                 Container(
                   child: Text(
                     date,
-                    style: TextStyle(fontSize: _deviceHeight / 18),
+                    style: TextStyle(fontSize: _deviceHeight / 20),
                   ),
                 ),
               ],
@@ -279,7 +283,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
               ),
               InkWell(
                 onTap: () {
-                  _saveTask();
+                  _saveTask(context);
                 },
                 child: Container(
                   padding: EdgeInsets.all(16),

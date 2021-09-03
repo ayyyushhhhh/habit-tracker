@@ -18,12 +18,15 @@ class _HomePageState extends State<HomePage> {
   final tabs = [
     HabitTrackerScreen(),
     ChangeNotifierProvider<TasksNotifier>(
-        create: (_) => TasksNotifier(),
-        child: Builder(
-          builder: (BuildContext context) {
-            return TimeBlockerScreen();
-          },
-        ))
+      create: (_) {
+        return TasksNotifier();
+      },
+      child: Builder(
+        builder: (BuildContext context) {
+          return TimeBlockerScreen();
+        },
+      ),
+    ),
   ];
 
   @override

@@ -7,15 +7,16 @@ part 'time_block_model.g.dart';
 class Tasks {
   final String from;
   final String to;
-
   final String taskTitle;
-
   final String taskDescription;
-  Tasks(
-      {required this.from,
-      required this.to,
-      required this.taskTitle,
-      required this.taskDescription});
+  bool isDone = false;
+  Tasks({
+    required this.from,
+    required this.to,
+    required this.taskTitle,
+    required this.taskDescription,
+    this.isDone = false,
+  });
 
   factory Tasks.fromJson(Map<String, dynamic> json) => _$TasksFromJson(json);
   Map<String, dynamic> toJson() => _$TasksToJson(this);
@@ -24,7 +25,6 @@ class Tasks {
 class TasksNotifier extends ChangeNotifier {
   void saveTasksList(String date, List<String> tasks) {
     TasksData.saveTask(date, tasks);
-
     notifyListeners();
   }
 

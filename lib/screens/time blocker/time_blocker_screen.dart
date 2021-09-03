@@ -17,6 +17,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
   DateTime _selectedDate = DateTime.now();
   double _deviceHeight = 0;
   double _deviceWidth = 0;
+
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
@@ -48,9 +49,11 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                   InkWell(
                     onTap: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (BuildContext context) {
-                          return AddBlockScreen();
-                        }),
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AddBlockScreen();
+                          },
+                        ),
                       );
                     },
                     child: Container(
@@ -90,7 +93,14 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                       decodedTasks.add(Tasks.fromJson(json.decode(task)));
                     });
                     decodedTasks.sort((a, b) {
-                      return a.from.compareTo(b.from);
+                      final format = DateFormat.jm();
+                      TimeOfDay afromTime =
+                          TimeOfDay.fromDateTime(format.parse(a.from));
+                      TimeOfDay bfromTime =
+                          TimeOfDay.fromDateTime(format.parse(b.from));
+                      double aTime = afromTime.hour + afromTime.minute / 60.0;
+                      double bTime = bfromTime.hour + bfromTime.minute / 60.0;
+                      return aTime.compareTo(bTime);
                     });
                     if (decodedTasks.isEmpty) {
                       return Center(
@@ -101,7 +111,13 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                         shrinkWrap: true,
                         itemCount: decodedTasks.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return TimeBlockCard(blockTask: decodedTasks[index]);
+                          print(decodedTasks[index].isDone);
+                          return TimeBlockCard(
+                            blockTask: decodedTasks[index],
+                            index: index,
+                            selectedDate: DateFormat.yMMMMd("en_US")
+                                .format(_selectedDate),
+                          );
                         },
                       );
                     }
