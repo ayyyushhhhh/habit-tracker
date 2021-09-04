@@ -19,4 +19,16 @@ class TasksData {
     }
     return tasksList;
   }
+
+  static void saveTimeLocale(int t) {
+    tasksPrefrences!.setInt("is24", t);
+  }
+
+  static dynamic getTimeLocale() {
+    int? is24 = tasksPrefrences!.getInt("is24");
+    if (is24 == null) {
+      return "";
+    }
+    return is24;
+  }
 }

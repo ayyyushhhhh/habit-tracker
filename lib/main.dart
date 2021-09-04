@@ -25,51 +25,60 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-// class MyApp extends StatelessWidget {
-//   void _resetSavedData() {
-//     if (Prefrences.getDate() !=
-//         DateFormat('dd-MM-yyyy').format(DateTime.now())) {
-//       final myBox = HabitBox.getHabitBox();
-//       List<Habit> allHabits = myBox.values.toList().cast<Habit>();
-//       allHabits.forEach((habit) {
-//         myBox.put(habit.title, habit.updateWith(isCompleted: false));
-//       });
-//       Prefrences.saveDate(DateTime.now());
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     _resetSavedData();
-//     SystemChrome.setPreferredOrientations([
-//       DeviceOrientation.portraitUp,
-//       DeviceOrientation.portraitDown,
-//     ]);
-//     return ChangeNotifierProvider<ThemeManager>(
-//       create: (context) => ThemeManager(),
-//       child: Consumer<ThemeManager>(
-//         builder: (BuildContext context, value, Widget? child) => MaterialApp(
-//           title: 'Habit Tracker',
-//           debugShowCheckedModeBanner: false,
-//           theme: value.appTheme,
-//           home: Prefrences.getuserName() == "" ? AddNameScreen() : HomePage(),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 class MyApp extends StatelessWidget {
+  void _resetSavedData() {
+    if (Prefrences.getDate() !=
+        DateFormat('dd-MM-yyyy').format(DateTime.now())) {
+      final myBox = HabitBox.getHabitBox();
+      List<Habit> allHabits = myBox.values.toList().cast<Habit>();
+      allHabits.forEach((habit) {
+        myBox.put(habit.title, habit.updateWith(isCompleted: false));
+      });
+      Prefrences.saveDate(DateTime.now());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TasksNotifier>(
-      create: (context) => TasksNotifier(),
-      child: MaterialApp(
-        title: "Time Blocker",
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark(),
-        home: TimeBlockerScreen(),
+    _resetSavedData();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeManager>(
+          create: (context) => ThemeManager(),
+        ),
+        ChangeNotifierProvider<TasksNotifier>(
+          create: (context) => TasksNotifier(),
+        ),
+      ],
+      child: Consumer<ThemeManager>(
+        builder: (BuildContext context, value, Widget? child) => MaterialApp(
+          title: 'Habit Tracker',
+          debugShowCheckedModeBanner: false,
+          theme: value.appTheme,
+          home: Prefrences.getuserName() == "" ? AddNameScreen() : HomePage(),
+        ),
       ),
     );
   }
 }
+
+
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return ChangeNotifierProvider<TasksNotifier>(
+//       create: (context) => TasksNotifier(),
+//       child: MaterialApp(
+//         title: "Time Blocker",
+//         debugShowCheckedModeBanner: false,
+//         theme: ThemeData.dark(),
+//         home: TimeBlockerScreen(),
+//       ),
+//     );
+//   }
+// }

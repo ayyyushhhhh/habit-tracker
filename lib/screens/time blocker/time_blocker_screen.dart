@@ -19,6 +19,11 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
   double _deviceWidth = 0;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
@@ -26,7 +31,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -93,14 +98,18 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                       decodedTasks.add(Tasks.fromJson(json.decode(task)));
                     });
                     decodedTasks.sort((a, b) {
-                      final format = DateFormat.jm();
-                      TimeOfDay afromTime =
-                          TimeOfDay.fromDateTime(format.parse(a.from));
-                      TimeOfDay bfromTime =
-                          TimeOfDay.fromDateTime(format.parse(b.from));
-                      double aTime = afromTime.hour + afromTime.minute / 60.0;
-                      double bTime = bfromTime.hour + bfromTime.minute / 60.0;
-                      return aTime.compareTo(bTime);
+                      if (a.from.contains("m")) {
+                        final format = DateFormat.jm();
+                        TimeOfDay afromTime =
+                            TimeOfDay.fromDateTime(format.parse(a.from));
+                        TimeOfDay bfromTime =
+                            TimeOfDay.fromDateTime(format.parse(b.from));
+                        double aTime = afromTime.hour + afromTime.minute / 60.0;
+                        double bTime = bfromTime.hour + bfromTime.minute / 60.0;
+                        return aTime.compareTo(bTime);
+                      } else {
+                        return a.from.compareTo(b.from);
+                      }
                     });
                     if (decodedTasks.isEmpty) {
                       return Center(
@@ -111,12 +120,17 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                         shrinkWrap: true,
                         itemCount: decodedTasks.length,
                         itemBuilder: (BuildContext context, int index) {
-                          print(decodedTasks[index].isDone);
-                          return TimeBlockCard(
-                            blockTask: decodedTasks[index],
-                            index: index,
-                            selectedDate: DateFormat.yMMMMd("en_US")
-                                .format(_selectedDate),
+                          return Dismissible(
+                            key: Key(decodedTasks[index].taskDescription),
+                            onDismissed: (direction) {
+                              _removeTask(context, index);
+                            },
+                            child: TimeBlockCard(
+                              blockTask: decodedTasks[index],
+                              index: index,
+                              selectedDate: DateFormat.yMMMMd("en_US")
+                                  .format(_selectedDate),
+                            ),
                           );
                         },
                       );
@@ -129,6 +143,16 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
         ),
       ),
     );
+  }
+
+  void _removeTask(BuildContext context, int index) {
+    final taskNotifier = Provider.of<TasksNotifier>(context, listen: false);
+    final taskList = TasksData.getSavedTask(
+      DateFormat.yMMMMd("en_US").format(_selectedDate),
+    );
+    taskList.removeAt(index);
+    taskNotifier.saveTasksList(
+        DateFormat.yMMMMd("en_US").format(_selectedDate), taskList);
   }
 
   Container _buildCalendar() {
@@ -211,7 +235,6 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
             );
           },
           dowBuilder: (context, day) {
-            // final text = DateFormat.E().format(day);
             return Center(
               child: Text(
                 "",

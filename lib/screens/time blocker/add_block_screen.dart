@@ -251,7 +251,8 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide.none),
                     hintText: "Enter Task description"),
-                maxLines: 5,
+                maxLines: 3,
+                maxLength: 100,
               ),
               SizedBox(
                 height: 10,

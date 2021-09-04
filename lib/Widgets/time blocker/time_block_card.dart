@@ -22,10 +22,17 @@ class _TimeBlockCardState extends State<TimeBlockCard> {
   Color cardColor = Colors.grey;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     if (widget.blockTask.isDone == true) {
-      cardColor = Colors.greenAccent;
+      cardColor = Color(0xFF00F6CE);
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double _deviceHeight = MediaQuery.of(context).size.height;
+    double _deviceWidth = MediaQuery.of(context).size.width;
     return InkWell(
       onDoubleTap: () {
         setState(() {
@@ -33,15 +40,16 @@ class _TimeBlockCardState extends State<TimeBlockCard> {
         });
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
+        margin: EdgeInsets.only(bottom: 20),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(left: 0),
-              width: 100,
-              height: 150,
+              width: _deviceWidth / 6,
+              height: _deviceHeight / 5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     widget.blockTask.from,
@@ -49,7 +57,7 @@ class _TimeBlockCardState extends State<TimeBlockCard> {
                   ),
                   Text("----"),
                   Text(
-                    widget.blockTask.from,
+                    widget.blockTask.to,
                     style: TextStyle(fontSize: 12),
                   ),
                 ],
@@ -57,7 +65,8 @@ class _TimeBlockCardState extends State<TimeBlockCard> {
             ),
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(20),
+                height: _deviceHeight / 5,
+                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: cardColor,
                   borderRadius: BorderRadius.circular(10),
@@ -68,7 +77,7 @@ class _TimeBlockCardState extends State<TimeBlockCard> {
                     Text(
                       widget.blockTask.taskTitle.toString(),
                       style: TextStyle(
-                          fontSize: 24,
+                          fontSize: _deviceWidth / 22,
                           color: Colors.black,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.1),
@@ -101,13 +110,19 @@ class _TimeBlockCardState extends State<TimeBlockCard> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      widget.blockTask.taskDescription.toString(),
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.1),
+                    Expanded(
+                      child: Container(
+                        child: Text(
+                          widget.blockTask.taskDescription.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          style: TextStyle(
+                              fontSize: _deviceWidth / 30,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 1.1),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -121,7 +136,7 @@ class _TimeBlockCardState extends State<TimeBlockCard> {
 
   void _updateTask(BuildContext context) {
     if (widget.blockTask.isDone == false) {
-      cardColor = Colors.lightGreenAccent;
+      cardColor = Color(0xFF00F6CE);
       Tasks task = Tasks(
           from: widget.blockTask.from,
           to: widget.blockTask.to,
