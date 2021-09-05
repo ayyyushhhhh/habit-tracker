@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:time_table/screens/habit%20tracker/habit_tracker_screen.dart';
+import 'package:time_table/screens/home_page.dart';
 import 'package:time_table/utils/habit%20tracker/prefrences.dart';
 
 class AddNameScreen extends StatefulWidget {
@@ -26,7 +26,7 @@ class _AddNameScreenState extends State<AddNameScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (BuildContext context) {
-                    return HabitTrackerScreen();
+                    return HomePage();
                   }),
                 );
               } else {

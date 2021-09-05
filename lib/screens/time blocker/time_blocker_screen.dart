@@ -197,7 +197,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                     Text(
                       DateFormat.d().format(datetime),
                       style: TextStyle(
-                          color: Colors.white,
+                          //color: Colors.white,
                           fontSize: _deviceWidth / 20,
                           fontWeight: FontWeight.bold),
                     ),
@@ -215,7 +215,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                     Text(
                       DateFormat.E().format(dateTime),
                       style: TextStyle(
-                          color: Colors.white70,
+                          color: Colors.blueGrey,
                           fontSize: _deviceWidth / 25,
                           fontWeight: FontWeight.bold),
                     ),
@@ -225,7 +225,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                     Text(
                       DateFormat.d().format(dateTime),
                       style: TextStyle(
-                          color: Colors.white,
+                          //color: Colors.white,
                           fontSize: _deviceWidth / 20,
                           fontWeight: FontWeight.bold),
                     ),

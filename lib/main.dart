@@ -8,7 +8,6 @@ import 'package:time_table/screens/habit%20tracker/add_name_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:time_table/screens/home_page.dart';
-import 'package:time_table/screens/time%20blocker/time_blocker_screen.dart';
 import 'package:time_table/utils/habit%20tracker/prefrences.dart';
 import 'package:time_table/utils/habit%20tracker/theme_provider.dart';
 import 'package:time_table/utils/time%20block/time_block_prefrences.dart';
@@ -65,20 +64,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return ChangeNotifierProvider<TasksNotifier>(
-//       create: (context) => TasksNotifier(),
-//       child: MaterialApp(
-//         title: "Time Blocker",
-//         debugShowCheckedModeBanner: false,
-//         theme: ThemeData.dark(),
-//         home: TimeBlockerScreen(),
-//       ),
-//     );
-//   }
-// }

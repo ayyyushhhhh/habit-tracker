@@ -114,50 +114,52 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
   Widget _buildDatePicker({required BuildContext context}) {
     String date = DateFormat.yMMMMd('en_US').format(_selectedDate);
 
-    return Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-            color: Colors.teal, borderRadius: BorderRadius.circular(10)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Date",
-                  style: TextStyle(
-                      fontSize: _deviceWidth / 16, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  child: Text(
-                    date,
-                    style: TextStyle(fontSize: _deviceHeight / 20),
-                  ),
-                ),
-              ],
-            ),
-            IconButton(
-                onPressed: () async {
-                  final DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: _selectedDate,
-                      firstDate: DateTime(2020, 12, 10),
-                      lastDate: DateTime(2025, 12, 10));
+    return InkWell(
+      onTap: () async {
+        final DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: _selectedDate,
+            firstDate: DateTime(2020, 12, 10),
+            lastDate: DateTime(2025, 12, 10));
 
-                  if (pickedDate != null) {
-                    _selectedDate = pickedDate;
-                  }
-                },
-                icon: Icon(
-                  Icons.calendar_today,
-                  size: 40,
-                )),
-          ],
-        ));
+        if (pickedDate != null) {
+          _selectedDate = pickedDate;
+        }
+      },
+      child: Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+              color: Colors.teal, borderRadius: BorderRadius.circular(10)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Date",
+                    style: TextStyle(
+                        fontSize: _deviceWidth / 20,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    child: Text(
+                      date,
+                      style: TextStyle(fontSize: _deviceHeight / 25),
+                    ),
+                  ),
+                ],
+              ),
+              Icon(
+                Icons.calendar_today,
+                size: _deviceWidth / 16,
+              )
+            ],
+          )),
+    );
   }
 
   _showTimePicker(TimeType selectTimetype, BuildContext context) async {
@@ -200,7 +202,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
                   'Add a Task',
                   style: TextStyle(
                       fontSize: _deviceWidth / 10,
-                      color: Colors.white,
+                      //  color: Colors.white,
                       fontWeight: FontWeight.bold),
                 ),
               ),

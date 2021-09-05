@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
-import 'package:time_table/models/time_blocker/time_block_model.dart';
+
 import 'package:time_table/screens/habit%20tracker/habit_tracker_screen.dart';
 import 'package:time_table/screens/time%20blocker/time_blocker_screen.dart';
 
@@ -18,16 +17,6 @@ class _HomePageState extends State<HomePage> {
   final tabs = [
     HabitTrackerScreen(),
     TimeBlockerScreen(),
-    // ChangeNotifierProvider<TasksNotifier>(
-    //   create: (_) {
-    //     return TasksNotifier();
-    //   },
-    //   child: Builder(
-    //     builder: (BuildContext context) {
-    //       return TimeBlockerScreen();
-    //     },
-    //   ),
-    // ),
   ];
 
   @override
