@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:time_table/Notification%20Manager/notification_manager.dart';
 
 import 'package:time_table/screens/habit%20tracker/habit_tracker_screen.dart';
 import 'package:time_table/screens/time%20blocker/time_blocker_screen.dart';
@@ -12,6 +13,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    NotificationManger.showNotificationDaily(
+        id: 1,
+        title: "Win your day",
+        body: "Wake up soldier!, It's time to plan your day!",
+        payload: "task");
+    listenNotifications();
+  }
+
+  void listenNotifications() =>
+      NotificationManger.onNotifications.stream.listen(onClickNotification);
+
+  void onClickNotification(String? payload) {
+    if (payload == "task") {
+      _currentIndex = 1;
+    } else {
+      _currentIndex = 0;
+    }
+  }
+
   int _currentIndex = 0;
 
   final tabs = [

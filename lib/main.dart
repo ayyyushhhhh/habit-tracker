@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:time_table/Notification%20Manager/notification_manager.dart';
 import 'package:time_table/hive%20boxes/habit_box.dart';
 import 'package:time_table/models/habit_tracker/habit_model.dart';
 import 'package:time_table/screens/habit%20tracker/add_name_screen.dart';
@@ -11,13 +12,16 @@ import 'package:time_table/screens/home_page.dart';
 import 'package:time_table/utils/habit%20tracker/prefrences.dart';
 import 'package:time_table/utils/habit%20tracker/theme_provider.dart';
 import 'package:time_table/utils/time%20block/time_block_prefrences.dart';
-
+import 'package:timezone/data/latest.dart' as tz;
 import 'models/time_blocker/time_block_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Prefrences.init();
   TasksData.init();
+  NotificationManger.init();
+  tz.initializeTimeZones();
+
   await Hive.initFlutter();
   Hive.registerAdapter(HabitAdapter());
   await Hive.openBox<Habit>("Habits");
