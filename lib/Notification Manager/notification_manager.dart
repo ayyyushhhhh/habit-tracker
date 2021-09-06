@@ -61,8 +61,10 @@ class NotificationManger {
     String? body,
     String? payload,
   }) async {
+    var time = Time(6, 0, 0);
+
     return _notification.zonedSchedule(
-        id, title, body, _scheduleTime(Time(6)), await _notificationDetails(),
+        id, title, body, _scheduleTime(time), await _notificationDetails(),
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true,
@@ -73,6 +75,7 @@ class NotificationManger {
     final now = tz.TZDateTime.now(tz.local);
     final scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, now.day,
         time.hour, time.minute, time.second);
+
     return scheduleDate.isBefore(now)
         ? scheduleDate.add(Duration(days: 1))
         : scheduleDate;

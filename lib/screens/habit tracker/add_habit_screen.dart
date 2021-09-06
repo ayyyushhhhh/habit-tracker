@@ -28,7 +28,26 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
       final habitbox = HabitBox.getHabitBox();
       habitbox.put(habit.title, habit);
       Navigator.pop(context);
+    } else if (habitTitle == null) {
+      _showSnackbar(context, "Give some title", "ok!");
+    } else if (description == null) {
+      _showSnackbar(context, "Give some title", "ok!");
+    } else if (_habitIcon == null) {
+      _showSnackbar(context, "Select an icon", "ok!");
     }
+  }
+
+  void _showSnackbar(BuildContext context, String title, String label) {
+    final snackBar = SnackBar(
+      content: Text(title),
+      action: SnackBarAction(
+        label: label,
+        onPressed: () {
+          // Navigator.pop(context);
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override

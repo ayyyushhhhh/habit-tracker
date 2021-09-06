@@ -16,13 +16,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
+    listenNotifications();
     NotificationManger.showNotificationDaily(
-        id: 1,
+        id: 0,
         title: "Win your day",
         body: "Wake up soldier!, It's time to plan your day!",
         payload: "task");
-    listenNotifications();
   }
 
   void listenNotifications() =>

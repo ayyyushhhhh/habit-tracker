@@ -19,8 +19,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Prefrences.init();
   TasksData.init();
-  NotificationManger.init();
   tz.initializeTimeZones();
+  NotificationManger.init();
 
   await Hive.initFlutter();
   Hive.registerAdapter(HabitAdapter());

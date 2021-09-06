@@ -49,8 +49,27 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
       final taskNotifier = Provider.of<TasksNotifier>(context, listen: false);
       taskNotifier.saveTasksList(
           DateFormat.yMMMMd('en_US').format(_selectedDate), taskLists);
+
+      _showSnackbar(context, "Double tap the card when you are done!", "ok!");
       Navigator.pop(context);
+    } else if (_taskDescription == null) {
+      _showSnackbar(context, "Give some description", "ok!");
+    } else if (_taskTitle == null) {
+      _showSnackbar(context, "Give some title", "ok!");
     }
+  }
+
+  void _showSnackbar(BuildContext context, String title, String label) {
+    final snackBar = SnackBar(
+      content: Text(title),
+      action: SnackBarAction(
+        label: label,
+        onPressed: () {
+          // Navigator.pop(context);
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Widget _buildTimePicker(
