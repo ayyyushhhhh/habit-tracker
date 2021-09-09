@@ -50,11 +50,14 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
       taskNotifier.saveTasksList(
           DateFormat.yMMMMd('en_US').format(_selectedDate), taskLists);
 
-      _showSnackbar(context, "Double tap the card when you are done!", "ok!");
+      _showSnackbar(
+          context,
+          "Double tap the card when you are done! or swipe the card to delete",
+          "ok!");
       Navigator.pop(context);
-    } else if (_taskDescription == null) {
+    } else if (_taskDescription == null || _taskDescription == "") {
       _showSnackbar(context, "Give some description", "ok!");
-    } else if (_taskTitle == null) {
+    } else if (_taskTitle == null || _taskTitle == "") {
       _showSnackbar(context, "Give some title", "ok!");
     }
   }
