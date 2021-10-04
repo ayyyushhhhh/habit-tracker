@@ -31,7 +31,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -40,11 +40,12 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                 children: [
                   Container(
                     child: Text(
-                      'Let\'s Start by  \nPlanning Your Day ',
+                      'Let\'s Plan \nYour Day',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: _deviceWidth / 18,
-                        fontWeight: FontWeight.w700,
+                        fontSize: _deviceWidth / 12,
+                        color: Colors.teal.shade300,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

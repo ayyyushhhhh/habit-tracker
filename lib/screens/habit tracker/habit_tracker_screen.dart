@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:time_table/Widgets/habit%20tracker/add_habit_card.dart';
 import 'package:time_table/Widgets/habit%20tracker/completed_habit_card.dart';
