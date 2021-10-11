@@ -40,4 +40,13 @@ class Prefrences {
     int? index = preferences!.getInt("themeindex");
     return index ?? 0;
   }
+
+  static int getSavedDP() {
+    int? index = preferences!.getInt("imageIndex");
+    return index ?? 1;
+  }
+
+  static void saveDP(int imageIndex) async {
+    preferences!.setInt("imageIndex", imageIndex);
+  }
 }

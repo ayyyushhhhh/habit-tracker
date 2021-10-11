@@ -11,6 +11,7 @@ import 'package:time_table/screens/home_page.dart';
 import 'package:time_table/utils/habit%20tracker/prefrences.dart';
 import 'package:time_table/utils/habit%20tracker/theme_provider.dart';
 import 'package:time_table/utils/time%20block/time_block_prefrences.dart';
+import 'package:time_table/utils/user_info.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'models/time_blocker/time_block_model.dart';
 
@@ -53,6 +54,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<TasksNotifier>(
           create: (context) => TasksNotifier(),
+        ),
+        ChangeNotifierProvider<User>(
+          create: (context) => User(),
         ),
       ],
       child: Consumer<ThemeManager>(

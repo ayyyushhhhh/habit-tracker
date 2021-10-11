@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:time_table/Notification%20Manager/notification_manager.dart';
 
 import 'package:time_table/screens/habit%20tracker/habit_tracker_screen.dart';
+import 'package:time_table/screens/settings/settings_screen.dart';
 import 'package:time_table/screens/time%20blocker/time_blocker_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -58,10 +59,7 @@ class _HomePageState extends State<HomePage> {
 
   int _currentIndex = 0;
 
-  final tabs = [
-    HabitTrackerScreen(),
-    TimeBlockerScreen(),
-  ];
+  final tabs = [HabitTrackerScreen(), TimeBlockerScreen(), SettingsPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +91,8 @@ class _HomePageState extends State<HomePage> {
                 icon: Icon(Icons.unfold_less), label: "Habit Tracker"),
             NavigationDestination(
                 icon: Icon(Icons.event_note), label: "Plan your Day"),
+            NavigationDestination(
+                icon: Icon(Icons.settings), label: "Settings"),
           ],
         ),
       ),
