@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     listenNotifications();
-    hideBottomBar();
+    // hideBottomBar();
     NotificationManger.showNotificationDaily(
         id: 0,
         title: "Win your day",
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
       body: tabs[_currentIndex],
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
-          height: 60,
+          height: 80,
           // backgroundColor: Colors.teal,
           indicatorColor:
               _currentIndex == 0 ? Colors.purple.shade200 : Colors.teal,
