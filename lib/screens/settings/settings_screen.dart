@@ -43,7 +43,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Utils.openLinks(url: Uri.encodeFull(url));
   }
 
-  void saveProfilePhoto(BuildContext context, int index) async {
+  void saveProfilePhoto(BuildContext context, double deviceWidth) async {
     _controller = _scaffoldKey.currentState!.showBottomSheet<void>(
       (BuildContext context) {
         return SingleChildScrollView(
@@ -55,7 +55,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 Divider(),
                 Text(
                   "Enter your Name",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: deviceWidth / 14, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 10),
                 Container(
@@ -85,7 +86,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 Divider(),
                 Text(
                   "Chose your Avatar",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: deviceWidth / 14, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 10,
@@ -93,11 +95,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    imageAvatar(index: 1),
-                    imageAvatar(index: 2),
-                    imageAvatar(index: 3),
-                    imageAvatar(index: 4),
-                    imageAvatar(index: 5),
+                    imageAvatar(index: 1, deviceWidth: deviceWidth),
+                    imageAvatar(index: 2, deviceWidth: deviceWidth),
+                    imageAvatar(index: 3, deviceWidth: deviceWidth),
+                    imageAvatar(index: 4, deviceWidth: deviceWidth),
+                    imageAvatar(index: 5, deviceWidth: deviceWidth),
                   ],
                 ),
                 SizedBox(
@@ -106,11 +108,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    imageAvatar(index: 6),
-                    imageAvatar(index: 7),
-                    imageAvatar(index: 8),
-                    imageAvatar(index: 9),
-                    imageAvatar(index: 10),
+                    imageAvatar(index: 6, deviceWidth: deviceWidth),
+                    imageAvatar(index: 7, deviceWidth: deviceWidth),
+                    imageAvatar(index: 8, deviceWidth: deviceWidth),
+                    imageAvatar(index: 9, deviceWidth: deviceWidth),
+                    imageAvatar(index: 10, deviceWidth: deviceWidth),
                   ],
                 ),
                 SizedBox(
@@ -131,7 +133,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: Text(
                         "Save",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: deviceWidth / 24,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     SizedBox(
@@ -144,7 +147,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: Text(
                         "Cancel",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: deviceWidth / 24,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
@@ -157,7 +161,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget imageAvatar({required int index}) {
+  Widget imageAvatar({required int index, required double deviceWidth}) {
     return GestureDetector(
       onTap: () {
         _controller!.setState!(() {
@@ -165,7 +169,7 @@ class _SettingsPageState extends State<SettingsPage> {
         });
       },
       child: CircleAvatar(
-        radius: selectedIndex == index ? 55 : 30,
+        radius: selectedIndex == index ? deviceWidth / 8 : deviceWidth / 14,
         backgroundImage: AssetImage('assets/profilePictures/$index.png'),
       ),
     );
@@ -173,158 +177,162 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: SafeArea(
-        child: Scaffold(
-          key: _scaffoldKey,
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.all(20),
-                  padding: EdgeInsets.all(10),
-                  child: Consumer<User>(
-                    builder: (_, user, __) {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              saveProfilePhoto(context, profileIndex());
-                            },
-                            child: CircleAvatar(
-                              radius: 50,
-                              backgroundColor: Colors.grey,
-                              backgroundImage: AssetImage(
-                                  'assets/profilePictures/${user.getProfilePic}.png'),
-                            ),
+    final deviceWidth = MediaQuery.of(context).size.width;
+
+    return SafeArea(
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.all(20),
+                padding: EdgeInsets.all(10),
+                child: Consumer<User>(
+                  builder: (_, user, __) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            saveProfilePhoto(context, deviceWidth);
+                          },
+                          child: CircleAvatar(
+                            radius: deviceWidth / 8,
+                            backgroundColor: Colors.grey,
+                            backgroundImage: AssetImage(
+                                'assets/profilePictures/${user.getProfilePic}.png'),
                           ),
-                          SizedBox(width: 20),
-                          Text(
-                            user.getName,
-                            style: TextStyle(
-                                fontSize: 40, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      );
-                    },
-                  ),
+                        ),
+                        SizedBox(width: 20),
+                        Text(
+                          user.getName,
+                          style: TextStyle(
+                              fontSize: deviceWidth / 12,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    );
+                  },
                 ),
-                Divider(),
-                Container(
-                  margin: EdgeInsets.only(
-                    right: 20,
-                    left: 20,
-                    top: 7,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "App",
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                      Consumer<ThemeManager>(builder:
-                          (BuildContext context, theme, Widget? child) {
-                        return ListTile(
-                          contentPadding: EdgeInsets.only(right: 20),
-                          leading: Icon(Prefrences.getSavedTheme() == 0
-                              ? Icons.dark_mode
-                              : Icons.light_mode),
-                          title: Text(
-                            "Dark/Light Mode",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          trailing: CupertinoSwitch(
-                            value:
-                                Prefrences.getSavedTheme() == 0 ? true : false,
-                            onChanged: (value) {
-                              Prefrences.saveTheme(value ? 1 : 0);
-                              if (value == false) {
-                                theme.updateTheme(ThemeType.LightTheme);
-                              } else {
-                                theme.updateTheme(ThemeType.DarkTheme);
-                              }
-                            },
-                          ),
-                        );
-                      }),
-                      Divider(),
-                      Text(
-                        "Help",
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          openMail();
-                        },
-                        child: ListTile(
-                          contentPadding: EdgeInsets.only(right: 20),
-                          leading: Icon(
-                            Icons.mail,
-                          ),
-                          title: Text(
-                            "Contact us",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          subtitle: Text("Suggestions/Feedback/Bugs"),
+              ),
+              Divider(),
+              Container(
+                margin: EdgeInsets.only(
+                  right: 20,
+                  left: 20,
+                  top: 7,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "App",
+                      style: TextStyle(
+                          fontSize: deviceWidth / 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Consumer<ThemeManager>(
+                        builder: (BuildContext context, theme, Widget? child) {
+                      return ListTile(
+                        contentPadding: EdgeInsets.only(right: 20),
+                        leading: Icon(Prefrences.getSavedTheme() == 0
+                            ? Icons.dark_mode
+                            : Icons.light_mode),
+                        title: Text(
+                          "Dark/Light Mode",
+                          style: TextStyle(fontSize: deviceWidth / 22),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          openPrivacyPolicy();
-                        },
-                        child: ListTile(
-                          contentPadding: EdgeInsets.only(right: 20),
-                          leading: Icon(Icons.policy),
-                          title: Text(
-                            "Privacy Policy",
-                            style: TextStyle(fontSize: 20),
-                          ),
+                        trailing: CupertinoSwitch(
+                          value: Prefrences.getSavedTheme() == 0 ? true : false,
+                          onChanged: (value) {
+                            Prefrences.saveTheme(value ? 1 : 0);
+                            if (value == false) {
+                              theme.updateTheme(ThemeType.LightTheme);
+                            } else {
+                              theme.updateTheme(ThemeType.DarkTheme);
+                            }
+                          },
                         ),
-                      ),
-                      Divider(),
-                      Text(
-                        "About",
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          openPlayStore();
-                        },
-                        child: ListTile(
-                          contentPadding: EdgeInsets.only(right: 20),
-                          leading: Icon(
-                            Icons.star,
-                          ),
-                          title: Text(
-                            "Rate us",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          subtitle: Text("Your 5 Stars means a lot"),
-                        ),
-                      ),
-                      ListTile(
+                      );
+                    }),
+                    Divider(),
+                    Text(
+                      "Help",
+                      style: TextStyle(
+                          fontSize: deviceWidth / 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        openMail();
+                      },
+                      child: ListTile(
                         contentPadding: EdgeInsets.only(right: 20),
                         leading: Icon(
-                          Icons.info,
+                          Icons.mail,
                         ),
                         title: Text(
-                          "App Version",
-                          style: TextStyle(fontSize: 20),
+                          "Contact us",
+                          style: TextStyle(fontSize: deviceWidth / 22),
                         ),
-                        subtitle: Text("3.0.0"),
+                        subtitle: Text("Suggestions/Feedback/Bugs"),
                       ),
-                    ],
-                  ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        openPrivacyPolicy();
+                      },
+                      child: ListTile(
+                        contentPadding: EdgeInsets.only(right: 20),
+                        leading: Icon(Icons.policy),
+                        title: Text(
+                          "Privacy Policy",
+                          style: TextStyle(fontSize: deviceWidth / 22),
+                        ),
+                      ),
+                    ),
+                    Divider(),
+                    Text(
+                      "About",
+                      style: TextStyle(
+                          fontSize: deviceWidth / 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        openPlayStore();
+                      },
+                      child: ListTile(
+                        contentPadding:
+                            EdgeInsets.only(right: deviceWidth / 22),
+                        leading: Icon(
+                          Icons.star,
+                        ),
+                        title: Text(
+                          "Rate us",
+                          style: TextStyle(fontSize: deviceWidth / 22),
+                        ),
+                        subtitle: Text("Your 5 Stars means a lot"),
+                      ),
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.only(right: 20),
+                      leading: Icon(
+                        Icons.info,
+                      ),
+                      title: Text(
+                        "App Version",
+                        style: TextStyle(fontSize: deviceWidth / 22),
+                      ),
+                      subtitle: Text("3.0.0"),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
