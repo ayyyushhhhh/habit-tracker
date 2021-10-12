@@ -9,7 +9,6 @@ import 'package:time_table/screens/habit%20tracker/add_habit_screen.dart';
 import 'package:time_table/screens/habit%20tracker/habit_summary_screen.dart';
 import 'package:time_table/utils/habit%20tracker/habit_tracker_colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'package:time_table/utils/habit%20tracker/streak_cal.dart';
 
 import 'package:time_table/utils/user_info.dart';
@@ -173,7 +172,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                         ),
                       ),
                       Text(
-                        user.name,
+                        user.getName,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: devicewidth! / 12,
@@ -187,7 +186,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                 CircleAvatar(
                   radius: 50,
                   backgroundImage: AssetImage(
-                      "assets/profilePictures/${user.profilePic}.png"),
+                      "assets/profilePictures/${user.getProfilePic}.png"),
                 ),
               ],
             );

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:time_table/screens/home_page.dart';
 import 'package:time_table/utils/habit%20tracker/prefrences.dart';
 
@@ -13,6 +12,22 @@ class AddNameScreen extends StatefulWidget {
 
 class _AddNameScreenState extends State<AddNameScreen> {
   String? userName;
+  int selectedIndex = 1;
+
+  Widget imageAvatar({required int index}) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedIndex = index;
+        });
+      },
+      child: CircleAvatar(
+        radius: selectedIndex == index ? 55 : 30,
+        backgroundImage: AssetImage('assets/profilePictures/$index.png'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +37,7 @@ class _AddNameScreenState extends State<AddNameScreen> {
             onPressed: () {
               if (userName != null && userName != "") {
                 Prefrences.saveName(userName.toString());
+                Prefrences.saveDP(selectedIndex);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (BuildContext context) {
@@ -56,15 +72,44 @@ class _AddNameScreenState extends State<AddNameScreen> {
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
+            SizedBox(
+              height: 50,
+            ),
             Container(
               margin: EdgeInsets.all(20),
-              child: SvgPicture.asset(
-                "assets/svg/profile_name.svg",
-                height: 250,
+              child: Text(
+                "Chose your Avatar",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                imageAvatar(index: 1),
+                imageAvatar(index: 2),
+                imageAvatar(index: 3),
+                imageAvatar(index: 4),
+                imageAvatar(index: 5),
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                imageAvatar(index: 6),
+                imageAvatar(index: 7),
+                imageAvatar(index: 8),
+                imageAvatar(index: 9),
+                imageAvatar(index: 10),
+              ],
             ),
             Container(
               margin: EdgeInsets.all(20),
