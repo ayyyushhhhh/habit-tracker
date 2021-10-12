@@ -44,12 +44,8 @@ class NotificationManger {
       String? body,
       String? payload,
       required DateTime scheduledDate}) async {
-    return _notification.zonedSchedule(
-        id,
-        title,
-        body,
-        tz.TZDateTime.from(scheduledDate, tz.local),
-        await _notificationDetails(),
+    return _notification.zonedSchedule(id, title, body,
+        tz.TZDateTime.from(scheduledDate, tz.UTC), await _notificationDetails(),
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
@@ -72,8 +68,8 @@ class NotificationManger {
   }
 
   static tz.TZDateTime _scheduleTime(Time time) {
-    final now = tz.TZDateTime.now(tz.local);
-    final scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, now.day,
+    final now = tz.TZDateTime.now(tz.UTC);
+    final scheduleDate = tz.TZDateTime(tz.UTC, now.year, now.month, now.day,
         time.hour, time.minute, time.second);
 
     return scheduleDate.isBefore(now)

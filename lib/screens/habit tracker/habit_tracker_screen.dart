@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:time_table/Widgets/habit%20tracker/add_habit_card.dart';
 import 'package:time_table/Widgets/habit%20tracker/completed_habit_card.dart';
@@ -11,8 +9,9 @@ import 'package:time_table/screens/habit%20tracker/add_habit_screen.dart';
 import 'package:time_table/screens/habit%20tracker/habit_summary_screen.dart';
 import 'package:time_table/utils/habit%20tracker/habit_tracker_colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:time_table/utils/habit%20tracker/prefrences.dart';
-import 'package:time_table/utils/habit%20tracker/theme_provider.dart';
+import 'package:time_table/utils/habit%20tracker/streak_cal.dart';
+
+import 'package:time_table/utils/user_info.dart';
 
 class HabitTrackerScreen extends StatefulWidget {
   @override
@@ -32,57 +31,6 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
   @override
   void dispose() {
     super.dispose();
-  }
-
-  Habit calculateStreak({
-    required Habit habit,
-  }) {
-    final habitbox = HabitBox.getHabitBox();
-
-    int diff = DateTime.now().difference(habit.dateCreated!).inDays;
-
-    for (int i = diff; i > 0; i--) {
-      DateTime lastDate = DateTime.now().subtract(Duration(days: i));
-      lastDate = DateTime(lastDate.year, lastDate.month, lastDate.day);
-      if (!habit.skipDates!.contains(lastDate) &&
-          !habit.completedDates!.contains(lastDate)) {
-        habit = habit.updateWith(skipDate: lastDate);
-      }
-    }
-
-    int index = habit.index!;
-    int lastIndex = habit.lastIndex!;
-    int streaks = habit.streaks!;
-    List<DateTime> totalDates = habit.completedDates! + habit.skipDates!;
-    totalDates.sort();
-
-    if (totalDates.length != 0 && habit.skipDates!.contains(totalDates.last)) {
-      streaks = 0;
-    } else {
-      for (int i = index; i < totalDates.length; i++) {
-        if (habit.skipDates!.contains(totalDates[i])) {
-          index = i;
-          break;
-        } else {
-          index = totalDates.length;
-        }
-      }
-
-      streaks = index - lastIndex;
-
-      for (int i = index; i < totalDates.length; i++) {
-        if (habit.completedDates!.contains(totalDates[i])) {
-          lastIndex = i;
-          break;
-        }
-      }
-
-      index = lastIndex;
-    }
-    habitbox.put(habit.title,
-        habit.updateWith(streak: streaks, lastIndex: lastIndex, index: index));
-    return habit.updateWith(
-        streak: streaks, lastIndex: lastIndex, index: index);
   }
 
   @override
@@ -205,56 +153,44 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
       alignment: Alignment.centerLeft,
       child: Container(
         margin: EdgeInsets.all(20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: devicewidth! / 1.8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Hello ,",
-                    style: TextStyle(
-                      fontSize: devicewidth! / 12,
-                      color: kHeadingTextColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+        child: Consumer<User>(
+          builder: (context, user, child) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: devicewidth! / 1.8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Hello ,",
+                        style: TextStyle(
+                          fontSize: devicewidth! / 12,
+                          color: kHeadingTextColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        user.getName,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: devicewidth! / 12,
+                          color: Colors.purpleAccent.shade100,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
                   ),
-                  Text(
-                    Prefrences.getuserName(),
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: devicewidth! / 12,
-                      color: Colors.purpleAccent.shade100,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Consumer<ThemeManager>(
-                builder: (BuildContext context, theme, Widget? child) {
-              return Row(
-                children: [
-                  Icon(Prefrences.getSavedTheme() == 0
-                      ? Icons.dark_mode
-                      : Icons.light_mode),
-                  CupertinoSwitch(
-                    value: Prefrences.getSavedTheme() == 0 ? true : false,
-                    onChanged: (value) {
-                      Prefrences.saveTheme(value ? 1 : 0);
-                      if (value == false) {
-                        theme.updateTheme(ThemeType.LightTheme);
-                      } else {
-                        theme.updateTheme(ThemeType.DarkTheme);
-                      }
-                    },
-                  ),
-                ],
-              );
-            }),
-          ],
+                ),
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AssetImage(
+                      "assets/profilePictures/${user.getProfilePic}.png"),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

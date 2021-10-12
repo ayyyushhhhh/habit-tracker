@@ -56,7 +56,6 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
     deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.light,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(deviceHeight / 8),
           child: Text(

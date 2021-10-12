@@ -6,12 +6,12 @@ import 'package:time_table/Notification%20Manager/notification_manager.dart';
 import 'package:time_table/hive%20boxes/habit_box.dart';
 import 'package:time_table/models/habit_tracker/habit_model.dart';
 import 'package:time_table/screens/habit%20tracker/add_name_screen.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:time_table/screens/home_page.dart';
 import 'package:time_table/utils/habit%20tracker/prefrences.dart';
 import 'package:time_table/utils/habit%20tracker/theme_provider.dart';
 import 'package:time_table/utils/time%20block/time_block_prefrences.dart';
+import 'package:time_table/utils/user_info.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'models/time_blocker/time_block_model.dart';
 
@@ -21,7 +21,6 @@ Future<void> main() async {
   TasksData.init();
   tz.initializeTimeZones();
   NotificationManger.init();
-
   await Hive.initFlutter();
   Hive.registerAdapter(HabitAdapter());
   await Hive.openBox<Habit>("Habits");
@@ -55,6 +54,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<TasksNotifier>(
           create: (context) => TasksNotifier(),
+        ),
+        ChangeNotifierProvider<User>(
+          create: (context) => User(),
         ),
       ],
       child: Consumer<ThemeManager>(
