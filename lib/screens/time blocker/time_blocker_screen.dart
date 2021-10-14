@@ -122,8 +122,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                         itemCount: decodedTasks.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Dismissible(
-                            key: Key(decodedTasks[index].to +
-                                decodedTasks[index].from),
+                            key: UniqueKey(),
                             onDismissed: (direction) {
                               _removeTask(context, index);
                             },

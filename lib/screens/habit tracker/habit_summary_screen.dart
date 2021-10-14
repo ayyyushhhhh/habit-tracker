@@ -45,137 +45,153 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
   Widget build(BuildContext context) {
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              _deleteHabitBuilder(context);
-            },
-            icon: Icon(Icons.delete),
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(deviceHeight / 8),
-          child: Text(
-            "Habit Summary",
-            style: TextStyle(
-                fontSize: deviceWidth / 10,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.2),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                widget.habit.icon,
-                height: deviceHeight / 5,
-                width: deviceHeight / 5,
+    return SafeArea(
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              expandedHeight: deviceHeight / 8,
+              pinned: true,
+              centerTitle: true,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back_ios_new),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                widget.habit.title,
-                style: TextStyle(
-                    fontSize: deviceWidth / 15,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.purpleAccent.shade100),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "It takes 21 Days to create Habit.",
-                      style: TextStyle(
-                          fontSize: deviceWidth / 15,
-                          fontWeight: FontWeight.w800,
-                          color: kHeadingTextColor),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "You are on ${widget.habit.streaks} day(s) streak to create a habit.",
-                      style: TextStyle(
-                        fontSize: deviceWidth / 15,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
+              flexibleSpace: FlexibleSpaceBar(
+                centerTitle: true,
+                title: Text(
+                  "Habit Summary",
+                  style: TextStyle(
+                      // fontSize: deviceWidth / 10,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1.2),
                 ),
               ),
-              _habitCalendar(deviceHeight, deviceWidth),
-              calendarMarkers(),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: deviceWidth,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xFF03C8FE),
-                  borderRadius: BorderRadius.circular(10),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    _deleteHabitBuilder(context);
+                  },
+                  icon: Icon(Icons.delete),
                 ),
+              ],
+            ),
+            SliverList(
+                delegate: SliverChildListDelegate([
+              Container(
+                margin: EdgeInsets.only(right: 20, left: 20, bottom: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Image.asset(
+                      widget.habit.icon,
+                      height: deviceHeight / 5,
+                      width: deviceHeight / 5,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      widget.habit.title,
+                      style: TextStyle(
+                          fontSize: deviceWidth / 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.purpleAccent.shade100),
+                    ),
                     Container(
-                      margin: EdgeInsets.only(top: 10),
-                      child: Text(
-                        "Since, ${DateFormat.yMMMMd('en_US').format(widget.habit.dateCreated!)}",
-                        style: TextStyle(
-                            fontSize: deviceWidth / 15,
-                            letterSpacing: 1.2,
-                            fontWeight: FontWeight.bold),
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "It takes 21 Days to create Habit.",
+                            style: TextStyle(
+                                fontSize: deviceWidth / 15,
+                                fontWeight: FontWeight.w800,
+                                color: kHeadingTextColor),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "You are on ${widget.habit.streaks} day(s) streak to create a habit.",
+                            style: TextStyle(
+                              fontSize: deviceWidth / 15,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    _buildDataRow(
-                      head: 'Total Days',
-                      data: diffDate,
-                      headColor: Colors.blueAccent.shade700,
+                    _habitCalendar(deviceHeight, deviceWidth),
+                    calendarMarkers(),
+                    SizedBox(
+                      height: 10,
                     ),
-                    _buildDataRow(
-                        head: 'Completed Days',
-                        data: widget.habit.completedDates!.length,
-                        headColor: Colors.green.shade900),
-                    _buildDataRow(
-                        head: 'Skiped Days',
-                        data: widget.habit.skipDates!.length,
-                        headColor: Colors.red.shade900),
-                    _buildDataRow(
-                        head: 'Completion Percentage',
-                        data: "${completeionPecent.toStringAsFixed(2)} %",
-                        headColor: Colors.amberAccent),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 5),
-                        child: Text(
-                          completeionPecent < 30
-                              ? "You are a warrior fight back for the right track."
-                              : "Persitence is the key, You are on the right track.",
-                          style: TextStyle(
-                              fontSize: deviceWidth / 20,
-                              fontWeight: FontWeight.w700,
-                              color: completeionPecent < 30
-                                  ? Colors.redAccent
-                                  : Colors.lightGreenAccent),
-                        ),
+                    Container(
+                      width: deviceWidth,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF03C8FE),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 10),
+                            child: Text(
+                              "Since, ${DateFormat.yMMMMd('en_US').format(widget.habit.dateCreated!)}",
+                              style: TextStyle(
+                                  fontSize: deviceWidth / 15,
+                                  letterSpacing: 1.2,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          _buildDataRow(
+                            head: 'Total Days',
+                            data: diffDate,
+                            headColor: Colors.blueAccent.shade700,
+                          ),
+                          _buildDataRow(
+                              head: 'Completed Days',
+                              data: widget.habit.completedDates!.length,
+                              headColor: Colors.green.shade900),
+                          _buildDataRow(
+                              head: 'Skiped Days',
+                              data: widget.habit.skipDates!.length,
+                              headColor: Colors.red.shade900),
+                          _buildDataRow(
+                              head: 'Completion Percentage',
+                              data: "${completeionPecent.toStringAsFixed(2)} %",
+                              headColor: Colors.amberAccent),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              margin: EdgeInsets.only(top: 5),
+                              child: Text(
+                                completeionPecent < 30
+                                    ? "You are a warrior fight back for the right track."
+                                    : "Persitence is the key, You are on the right track.",
+                                style: TextStyle(
+                                    fontSize: deviceWidth / 20,
+                                    fontWeight: FontWeight.w700,
+                                    color: completeionPecent < 30
+                                        ? Colors.redAccent
+                                        : Colors.lightGreenAccent),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ])),
+          ],
         ),
       ),
     );

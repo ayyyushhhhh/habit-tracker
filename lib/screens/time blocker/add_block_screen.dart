@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:time_table/Notification%20Manager/notification_manager.dart';
 import 'package:time_table/models/time_blocker/time_block_model.dart';
 import 'package:time_table/utils/time%20block/time_block_prefrences.dart';
 
@@ -25,6 +26,7 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
   DateTime _selectedDate = DateTime.now();
   double _deviceHeight = 0;
   double _deviceWidth = 0;
+
   @override
   void initState() {
     super.initState();
@@ -43,11 +45,26 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
           taskDescription: _taskDescription.toString(),
           isDone: false);
       final taskString = jsonEncode(task);
-
       taskLists.add(taskString);
+
+      DateTime notficationDate = DateTime(
+          _selectedDate.year,
+          _selectedDate.month,
+          _selectedDate.day,
+          _startTime.hour,
+          _startTime.minute);
+
+      print(notficationDate);
       final taskNotifier = Provider.of<TasksNotifier>(context, listen: false);
       taskNotifier.saveTasksList(
           DateFormat.yMMMMd('en_US').format(_selectedDate), taskLists);
+      if (notficationDate.isAfter(DateTime.now())) {
+        NotificationManger.showScheduleNotification(
+            id: task.taskTitle.length,
+            title: "It's time for ${task.taskTitle}",
+            body: "Remember to ${task.taskDescription}",
+            scheduledDate: notficationDate);
+      }
 
       _showSnackbar(
           context,
@@ -205,128 +222,139 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back_ios),
-              ),
-              Container(
-                child: Text(
-                  'Add a Task',
-                  style: TextStyle(
-                      fontSize: _deviceWidth / 10,
-                      //  color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "Title",
+    return SafeArea(
+      child: Scaffold(
+        body: CustomScrollView(slivers: [
+          SliverAppBar(
+            expandedHeight: _deviceHeight / 8,
+            pinned: true,
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back_ios_new),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
+              title: Text(
+                "Add a Task",
                 style: TextStyle(
-                    fontSize: _deviceWidth / 16, fontWeight: FontWeight.w600),
+                    // fontSize: deviceWidth / 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.2),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              TextField(
-                keyboardType: TextInputType.text,
-                onChanged: (value) {
-                  _taskTitle = value;
-                },
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(20),
-                    fillColor: Colors.black12,
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none),
-                    hintText: "Enter Task title "),
-                maxLength: 20,
-              ),
-              Text(
-                "Description",
-                style: TextStyle(
-                    fontSize: _deviceWidth / 16, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextField(
-                keyboardType: TextInputType.text,
-                onChanged: (value) {
-                  _taskDescription = value;
-                },
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(20),
-                    fillColor: Colors.black12,
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none),
-                    hintText: "Enter Task description"),
-                maxLines: 3,
-                maxLength: 100,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              _buildDatePicker(context: context),
-              SizedBox(
-                height: 10,
-              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
               Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildTimePicker(
-                        title: "Start Time",
-                        timeType: TimeType.StartTime,
-                        context: context),
-                    SizedBox(
-                      width: 10,
+                    Text(
+                      "Title",
+                      style: TextStyle(
+                          fontSize: _deviceWidth / 16,
+                          fontWeight: FontWeight.w600),
                     ),
-                    _buildTimePicker(
-                        title: "End Time",
-                        timeType: TimeType.EndTime,
-                        context: context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        _taskTitle = value;
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(20),
+                          fillColor: Colors.black12,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none),
+                          hintText: "Enter Task title "),
+                      maxLength: 20,
+                    ),
+                    Text(
+                      "Description",
+                      style: TextStyle(
+                          fontSize: _deviceWidth / 16,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        _taskDescription = value;
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(20),
+                          fillColor: Colors.black12,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none),
+                          hintText: "Enter Task description"),
+                      maxLines: 3,
+                      maxLength: 100,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    _buildDatePicker(context: context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buildTimePicker(
+                              title: "Start Time",
+                              timeType: TimeType.StartTime,
+                              context: context),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          _buildTimePicker(
+                              title: "End Time",
+                              timeType: TimeType.EndTime,
+                              context: context),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        _saveTask(context);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.teal,
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Add Task",
+                            style: TextStyle(fontSize: _deviceWidth / 10),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: () {
-                  _saveTask(context);
-                },
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.teal,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Add Task",
-                      style: TextStyle(fontSize: _deviceWidth / 10),
-                    ),
-                  ),
-                ),
-              )
-            ],
+            ]),
           ),
-        ),
+        ]),
       ),
     );
   }
