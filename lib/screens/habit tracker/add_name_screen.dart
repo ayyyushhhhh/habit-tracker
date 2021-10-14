@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:time_table/screens/home_page.dart';
-import 'package:time_table/utils/habit%20tracker/prefrences.dart';
+import 'package:time_table/utils/prefrences.dart';
 
 class AddNameScreen extends StatefulWidget {
   const AddNameScreen({Key? key}) : super(key: key);

@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:time_table/utils/Utlils.dart';
-import 'package:time_table/utils/habit%20tracker/prefrences.dart';
-import 'package:time_table/utils/habit%20tracker/theme_provider.dart';
+import 'package:time_table/utils/prefrences.dart';
+import 'package:time_table/utils/theme_provider.dart';
 import 'package:time_table/utils/user_info.dart';
 
 class SettingsPage extends StatefulWidget {

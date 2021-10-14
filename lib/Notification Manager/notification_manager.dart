@@ -58,7 +58,7 @@ class NotificationManger {
     String? payload,
   }) async {
     var time = Time(6, 0, 0);
-
+    print(_scheduleTime(time));
     return _notification.zonedSchedule(
         id, title, body, _scheduleTime(time), await _notificationDetails(),
         uiLocalNotificationDateInterpretation:
@@ -68,8 +68,8 @@ class NotificationManger {
   }
 
   static tz.TZDateTime _scheduleTime(Time time) {
-    final now = tz.TZDateTime.now(tz.UTC);
-    final scheduleDate = tz.TZDateTime(tz.UTC, now.year, now.month, now.day,
+    final now = tz.TZDateTime.now(tz.local);
+    final scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, now.day,
         time.hour, time.minute, time.second);
 
     return scheduleDate.isBefore(now)

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:time_table/utils/habit%20tracker/prefrences.dart';
+import 'package:time_table/utils/prefrences.dart';
 
 enum ThemeType { DarkTheme, LightTheme }
 
@@ -18,7 +18,7 @@ class ThemeManager with ChangeNotifier {
       appBarTheme: AppBarTheme(
         color: Colors.teal,
         iconTheme: IconThemeData(
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
     ),

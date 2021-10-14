@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:time_table/utils/habit%20tracker/prefrences.dart';
+import 'package:time_table/utils/prefrences.dart';
 import 'package:flutter/foundation.dart';
 
 class User extends ChangeNotifier {

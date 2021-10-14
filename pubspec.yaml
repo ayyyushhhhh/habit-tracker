@@ -29,8 +29,11 @@ dependencies:
   hive_flutter: ^1.1.0
   intl: ^0.17.0
   json_serializable: any
+  path_provider: ^2.0.5
   provider: ^5.0.0
   rxdart: ^0.27.2
+  screenshot: ^1.2.3
+  share_plus: ^3.0.4
   shared_preferences: ^2.0.6
   table_calendar: ^3.0.1
   url_launcher: ^6.0.12
