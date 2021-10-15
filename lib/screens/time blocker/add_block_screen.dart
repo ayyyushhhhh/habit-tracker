@@ -54,7 +54,6 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
           _startTime.hour,
           _startTime.minute);
 
-      print(notficationDate);
       final taskNotifier = Provider.of<TasksNotifier>(context, listen: false);
       taskNotifier.saveTasksList(
           DateFormat.yMMMMd('en_US').format(_selectedDate), taskLists);

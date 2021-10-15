@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     NotificationManger.showNotificationDaily(
         id: 0,
         title: "Win your day",
-        body: "Wake up soldier!, It's time to plan your day!",
+        body: "Wake up Samurai!, We got a day to plan!",
         payload: "task");
   }
 

@@ -8,7 +8,7 @@ class NotificationManger {
   static Future _notificationDetails() async {
     return NotificationDetails(
         android: AndroidNotificationDetails(
-          "channel id",
+          "channel id 4",
           "channel name",
           "channel descriprion",
           importance: Importance.max,
@@ -68,11 +68,11 @@ class NotificationManger {
   }
 
   static tz.TZDateTime _scheduleTime(Time time) {
-    final now = tz.TZDateTime.now(tz.local);
-    final scheduleDate = tz.TZDateTime(tz.local, now.year, now.month, now.day,
-        time.hour, time.minute, time.second);
+    DateTime scheduledDate = DateTime(DateTime.now().year, DateTime.now().month,
+        DateTime.now().day, time.hour, time.minute);
 
-    return scheduleDate.isBefore(now)
+    final scheduleDate = tz.TZDateTime.from(scheduledDate, tz.local);
+    return scheduleDate.isBefore(DateTime.now())
         ? scheduleDate.add(Duration(days: 1))
         : scheduleDate;
   }

@@ -327,7 +327,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         "App Version",
                         style: TextStyle(fontSize: deviceWidth / 22),
                       ),
-                      subtitle: Text("3.0.0"),
+                      subtitle: Text("3.0.1"),
                     ),
                   ],
                 ),
