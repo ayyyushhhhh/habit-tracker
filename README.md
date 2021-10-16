@@ -26,3 +26,9 @@ We use GitHub for bug tracking. Please search the existing issues for your bug a
 
 https://github.com/ayyyushhhhh/habit-tracker/issues
 
+## License
+Copyright 2021 Track and Grow
+
+Licensed under the GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
+
+Google Play and the Google Play logo are trademarks of Google LLC.
