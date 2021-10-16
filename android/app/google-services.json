@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "478538304058",
+    "firebase_url": "https://trackandgrow-ba0b3-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "trackandgrow-ba0b3",
+    "storage_bucket": "trackandgrow-ba0b3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478538304058:android:a1fc3b075c723316014303",
+        "android_client_info": {
+          "package_name": "com.scarecrowhouse.activity_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478538304058-sbvjs02ik6p8ek02gkdgmhh7isf0m7u5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scarecrowhouse.activity_tracker",
+            "certificate_hash": "dfe10a83de80851e29e0ef8b52628b9cb4009e50"
+          }
+        },
+        {
+          "client_id": "478538304058-eos4jig1hn4nevkalfbq45rpuugcb942.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVAnEsO9hap8UTyPRmHpEQGJv5mfne-DY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478538304058-eos4jig1hn4nevkalfbq45rpuugcb942.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

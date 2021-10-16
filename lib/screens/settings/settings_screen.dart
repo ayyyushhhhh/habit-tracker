@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:time_table/firebase/firebase_authentication.dart';
 import 'package:time_table/utils/Utlils.dart';
 import 'package:time_table/utils/prefrences.dart';
 import 'package:time_table/utils/theme_provider.dart';
@@ -229,6 +230,61 @@ class _SettingsPageState extends State<SettingsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
+                      "Backup/Restore",
+                      style: TextStyle(
+                          fontSize: deviceWidth / 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 10),
+                    StreamBuilder<String>(
+                      stream: FirebaseAuthentication.getUserStream,
+                      builder: (context, snapshot) {
+                        var uid = snapshot.data;
+                        if (uid == null) {
+                          return InkWell(
+                            onTap: () {
+                              FirebaseAuthentication.signInWithGoogle();
+                              if (FirebaseAuthentication.isLoggedIn() ==
+                                  true) {}
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                "Sign In With Google",
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
+                            ),
+                          );
+                        }
+                        return ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Icon(Icons.cloud_download),
+                          title: Text(
+                            "Create Backup",
+                            style: TextStyle(fontSize: deviceWidth / 22),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Divider(),
+              Container(
+                margin: EdgeInsets.only(
+                  right: 20,
+                  left: 20,
+                  top: 7,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
                       "App",
                       style: TextStyle(
                           fontSize: deviceWidth / 14,
@@ -258,6 +314,19 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       );
                     }),
+                    InkWell(
+                      onTap: () {
+                        FirebaseAuthentication.signOut();
+                      },
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: Icon(Icons.logout),
+                        title: Text(
+                          "Logout",
+                          style: TextStyle(fontSize: deviceWidth / 22),
+                        ),
+                      ),
+                    ),
                     Divider(),
                     Text(
                       "Help",
