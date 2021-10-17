@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:time_table/firebase/cloud_store.dart';
 import 'package:time_table/firebase/firebase_authentication.dart';
+import 'package:time_table/hive%20boxes/habit_box.dart';
+import 'package:time_table/models/habit_tracker/habit_model.dart';
+
 import 'package:time_table/utils/Utlils.dart';
 import 'package:time_table/utils/prefrences.dart';
 import 'package:time_table/utils/theme_provider.dart';
@@ -42,6 +46,28 @@ class _SettingsPageState extends State<SettingsPage> {
   void openPrivacyPolicy() {
     String url = "https://trackandgrow.blogspot.com/2021/07/privacypolicy.html";
     Utils.openLinks(url: Uri.encodeFull(url));
+  }
+
+  Future<void> createHabitBackup(BuildContext context) async {
+    final CloudData cloudData = Provider.of<CloudData>(context, listen: false);
+    final habitbox = HabitBox.getHabitBox();
+    final List<Habit> habits = habitbox.values.toList();
+    if (habits.isNotEmpty) {
+      for (var habit in habits) {
+        cloudData.uploadHabitData(habit.toMap());
+      }
+    }
+  }
+
+  Future<void> createTaskBackup(BuildContext context) async {
+    final CloudData cloudData = Provider.of<CloudData>(context, listen: false);
+    final habitbox = HabitBox.getHabitBox();
+    final List<Habit> habits = habitbox.values.toList();
+    if (habits.isNotEmpty) {
+      for (var habit in habits) {
+        cloudData.uploadHabitData(habit.toMap());
+      }
+    }
   }
 
   void saveProfilePhoto(BuildContext context, double deviceWidth) async {
@@ -244,8 +270,6 @@ class _SettingsPageState extends State<SettingsPage> {
                           return InkWell(
                             onTap: () {
                               FirebaseAuthentication.signInWithGoogle();
-                              if (FirebaseAuthentication.isLoggedIn() ==
-                                  true) {}
                             },
                             child: Container(
                               padding: EdgeInsets.all(10),
@@ -261,12 +285,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           );
                         }
-                        return ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: Icon(Icons.cloud_download),
-                          title: Text(
-                            "Create Backup",
-                            style: TextStyle(fontSize: deviceWidth / 22),
+                        return InkWell(
+                          onTap: () {
+                            createHabitBackup(context);
+                          },
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Icon(Icons.cloud_download),
+                            title: Text(
+                              "Create Backup",
+                              style: TextStyle(fontSize: deviceWidth / 22),
+                            ),
                           ),
                         );
                       },

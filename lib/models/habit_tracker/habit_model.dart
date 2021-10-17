@@ -72,4 +72,32 @@ class Habit extends HiveObject {
       dateCreated: this.dateCreated,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': this.title,
+      'icon': this.icon,
+      'isDone': this.isDone,
+      'description': this.description,
+      'completedDates': this.completedDates,
+      'skipDates': this.skipDates,
+      'dateCreated': this.dateCreated,
+      'streaks': this.streaks,
+      'lastIndex': this.lastIndex,
+    };
+  }
+
+  Habit fromMap(Map<String, dynamic> map) {
+    return Habit(
+      title: map['title'],
+      icon: map['icon'],
+      isDone: map['isDone'],
+      description: map['isDone'],
+      completedDates: map['completedDates'],
+      skipDates: map['skipDates'],
+      dateCreated: map['dateCreated'],
+      streaks: map['streaks'],
+      lastIndex: map['lastIndex'],
+    );
+  }
 }

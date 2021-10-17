@@ -8,6 +8,10 @@ class FirebaseAuthentication {
     _auth = FirebaseAuth.instance;
   }
 
+  static String get getUserUid {
+    return _auth.currentUser!.uid;
+  }
+
   static Stream<String> get getUserStream {
     return _auth.authStateChanges().map((User? user) {
       if (user == null) {

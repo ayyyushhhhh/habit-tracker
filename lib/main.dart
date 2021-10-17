@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:time_table/Notification%20Manager/notification_manager.dart';
+import 'package:time_table/firebase/cloud_store.dart';
 import 'package:time_table/firebase/firebase_authentication.dart';
 import 'package:time_table/hive%20boxes/habit_box.dart';
 import 'package:time_table/models/habit_tracker/habit_model.dart';
@@ -20,6 +21,7 @@ import 'models/time_blocker/time_block_model.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   Prefrences.init();
   TasksData.init();
   FirebaseAuthentication.initFirebaseAuth();
@@ -63,6 +65,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
+        Provider<CloudData>(
+          create: (context) => CloudData(),
+        )
       ],
       child: Consumer<ThemeManager>(
         builder: (BuildContext context, value, Widget? child) => MaterialApp(

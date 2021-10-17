@@ -47,23 +47,11 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
       final taskString = jsonEncode(task);
       taskLists.add(taskString);
 
-      DateTime notficationDate = DateTime(
-          _selectedDate.year,
-          _selectedDate.month,
-          _selectedDate.day,
-          _startTime.hour,
-          _startTime.minute);
-
       final taskNotifier = Provider.of<TasksNotifier>(context, listen: false);
       taskNotifier.saveTasksList(
           DateFormat.yMMMMd('en_US').format(_selectedDate), taskLists);
-      if (notficationDate.isAfter(DateTime.now())) {
-        NotificationManger.showScheduleNotification(
-            id: task.taskTitle.length,
-            title: "It's time for ${task.taskTitle}",
-            body: "Remember to ${task.taskDescription}",
-            scheduledDate: notficationDate);
-      }
+
+      _sendNotification(task);
 
       _showSnackbar(
           context,
@@ -74,6 +62,19 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
       _showSnackbar(context, "Give some description", "ok!");
     } else if (_taskTitle == null || _taskTitle == "") {
       _showSnackbar(context, "Give some title", "ok!");
+    }
+  }
+
+  void _sendNotification(Tasks task) {
+    DateTime notficationDate = DateTime(_selectedDate.year, _selectedDate.month,
+        _selectedDate.day, _startTime.hour, _startTime.minute);
+
+    if (notficationDate.isAfter(DateTime.now())) {
+      NotificationManger.showScheduleNotification(
+          id: task.taskTitle.length,
+          title: "It's time for ${task.taskTitle}",
+          body: "Remember to ${task.taskDescription}",
+          scheduledDate: notficationDate);
     }
   }
 
