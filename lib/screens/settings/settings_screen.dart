@@ -240,7 +240,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       stream: FirebaseAuthentication.getUserStream,
                       builder: (context, snapshot) {
                         var uid = snapshot.data;
-                        if (uid == null) {
+                        if (uid == "") {
                           return InkWell(
                             onTap: () {
                               FirebaseAuthentication.signInWithGoogle();

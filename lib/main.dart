@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<ThemeManager>(
         builder: (BuildContext context, value, Widget? child) => MaterialApp(
-          title: 'Habit Tracker',
+          title: 'Track and Grow',
           debugShowCheckedModeBanner: false,
           theme: value.appTheme,
           home: Prefrences.getuserName() == "" ? AddNameScreen() : HomePage(),
