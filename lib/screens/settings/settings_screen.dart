@@ -59,13 +59,12 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
-  Future<void> createTaskBackup(BuildContext context) async {
+  Future<void> restoreBackup(BuildContext context) async {
     final CloudData cloudData = Provider.of<CloudData>(context, listen: false);
-    final habitbox = HabitBox.getHabitBox();
-    final List<Habit> habits = habitbox.values.toList();
-    if (habits.isNotEmpty) {
-      for (var habit in habits) {
-        cloudData.uploadHabitData(habit.toMap());
+    final restoredHabits = await cloudData.getHabitData();
+    if (restoredHabits != []) {
+      for (var habit in restoredHabits) {
+        HabitBox.getHabitBox().put(habit.title, habit);
       }
     }
   }
@@ -285,18 +284,35 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           );
                         }
-                        return InkWell(
-                          onTap: () {
-                            createHabitBackup(context);
-                          },
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Icon(Icons.cloud_download),
-                            title: Text(
-                              "Create Backup",
-                              style: TextStyle(fontSize: deviceWidth / 22),
+                        return Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                createHabitBackup(context);
+                              },
+                              child: ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: Icon(Icons.cloud_download),
+                                title: Text(
+                                  "Create Backup",
+                                  style: TextStyle(fontSize: deviceWidth / 22),
+                                ),
+                              ),
                             ),
-                          ),
+                            InkWell(
+                              onTap: () {
+                                restoreBackup(context);
+                              },
+                              child: ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: Icon(Icons.restore),
+                                title: Text(
+                                  "Restore",
+                                  style: TextStyle(fontSize: deviceWidth / 22),
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       },
                     ),
@@ -343,19 +359,28 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       );
                     }),
-                    InkWell(
-                      onTap: () {
-                        FirebaseAuthentication.signOut();
-                      },
-                      child: ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: Icon(Icons.logout),
-                        title: Text(
-                          "Logout",
-                          style: TextStyle(fontSize: deviceWidth / 22),
-                        ),
-                      ),
-                    ),
+                    StreamBuilder<String>(
+                        stream: FirebaseAuthentication.getUserStream,
+                        builder: (context, snapshot) {
+                          var uid = snapshot.data;
+
+                          if (uid != "") {
+                            return InkWell(
+                              onTap: () {
+                                FirebaseAuthentication.signOut();
+                              },
+                              child: ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: Icon(Icons.logout),
+                                title: Text(
+                                  "Logout",
+                                  style: TextStyle(fontSize: deviceWidth / 22),
+                                ),
+                              ),
+                            );
+                          }
+                          return SizedBox(height: 0);
+                        }),
                     Divider(),
                     Text(
                       "Help",

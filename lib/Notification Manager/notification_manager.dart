@@ -58,7 +58,7 @@ class NotificationManger {
     String? payload,
   }) async {
     var time = Time(6, 0, 0);
-    print(_scheduleTime(time));
+
     return _notification.zonedSchedule(
         id, title, body, _scheduleTime(time), await _notificationDetails(),
         uiLocalNotificationDateInterpretation:

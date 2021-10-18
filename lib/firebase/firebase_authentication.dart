@@ -31,7 +31,12 @@ class FirebaseAuthentication {
   }
 
   static Future<void> signOut() async {
-    await _auth.signOut();
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print(e);
+      throw e;
+    }
   }
 
   static Future<UserCredential> signInWithGoogle() async {
