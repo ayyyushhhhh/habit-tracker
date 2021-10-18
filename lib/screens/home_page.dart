@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:time_table/Notification%20Manager/notification_manager.dart';
 
 import 'package:time_table/screens/habit%20tracker/habit_tracker_screen.dart';
@@ -18,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     listenNotifications();
-    // hideBottomBar();
+
     NotificationManger.showNotificationDaily(
         id: 0,
         title: "Win your day",

@@ -8,6 +8,10 @@ class FirebaseAuthentication {
     _auth = FirebaseAuth.instance;
   }
 
+  static String get getUserUid {
+    return _auth.currentUser!.uid;
+  }
+
   static Stream<String> get getUserStream {
     return _auth.authStateChanges().map((User? user) {
       if (user == null) {
@@ -27,7 +31,12 @@ class FirebaseAuthentication {
   }
 
   static Future<void> signOut() async {
-    await _auth.signOut();
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print(e);
+      throw e;
+    }
   }
 
   static Future<UserCredential> signInWithGoogle() async {

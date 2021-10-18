@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 part 'habit_model.g.dart';
 
 @HiveType(typeId: 0)
@@ -71,5 +74,50 @@ class Habit extends HiveObject {
       lastIndex: lastIndex ?? this.lastIndex,
       dateCreated: this.dateCreated,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    var completedDatesMap = json
+        .encode(this.completedDates!.map((date) => date.toString()).toList());
+    var skipDatesMap =
+        json.encode(this.skipDates!.map((date) => date.toString()).toList());
+    return {
+      'title': this.title,
+      'icon': this.icon,
+      'isDone': this.isDone,
+      'description': this.description,
+      'completedDates': completedDatesMap,
+      'skipDates': skipDatesMap,
+      'dateCreated': this.dateCreated.toString(),
+      'streaks': this.streaks,
+      'lastIndex': this.lastIndex,
+      'index': this.index,
+    };
+  }
+
+  static Habit fromMap(Map<String, dynamic> map) {
+    var compDates = jsonDecode(map['completedDates']);
+    var skipDates = jsonDecode(map['skipDates']);
+    List<DateTime> compDatesList = [];
+    for (var compDate in compDates) {
+      compDatesList.add(DateFormat("yyyy-MM-dd hh:mm:ss").parse(compDate));
+    }
+    List<DateTime> skipDatesList = [];
+    for (var skipDate in skipDates) {
+      skipDatesList.add(DateFormat("yyyy-MM-dd hh:mm:ss").parse(skipDate));
+    }
+    Habit habit = Habit(
+      title: map['title'],
+      icon: map['icon'],
+      isDone: map['isDone'],
+      description: map['description'],
+      dateCreated: DateFormat("yyyy-MM-dd hh:mm:ss").parse(map["dateCreated"]),
+      completedDates: compDatesList,
+      skipDates: skipDatesList,
+      streaks: map['streaks'],
+      lastIndex: map['lastIndex'],
+      index: map['index'],
+    );
+    return habit;
   }
 }
