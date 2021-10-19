@@ -11,13 +11,30 @@ class CloudData {
 
   Future<void> uploadHabitData(Map<String, dynamic> habit) async {
     String habitpath = "$uid/Habits/HabitData/${habit["title"]}";
+
     try {
       final DocumentReference<Map<String, dynamic>> cloudRef =
           _firestore.doc(habitpath);
+
       await cloudRef.set(habit);
     } catch (e) {
-      print(e);
       throw e;
+    }
+  }
+
+  Future<void> deleteHabitData() async {
+    String habitpath = "$uid/Habits/HabitData";
+
+    try {
+      QuerySnapshot allDocuments = await _firestore.collection(habitpath).get();
+      for (DocumentSnapshot doc in allDocuments.docs) {
+        print(doc.reference.path);
+        final DocumentReference<Map<String, dynamic>> cloudRef =
+            _firestore.doc(doc.reference.path);
+        cloudRef.delete();
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -39,10 +56,8 @@ class CloudData {
       for (var data in allData) {
         restoredHabits.add(Habit.fromMap(data as Map<String, dynamic>));
       }
-
       return restoredHabits;
-    } catch (e) {
-      print(e);
+    } on Exception catch (e) {
       throw e;
     }
   }

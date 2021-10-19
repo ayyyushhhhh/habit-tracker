@@ -1,6 +1,10 @@
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:time_table/Widgets/firebase/show_exception_widget.dart';
 import 'package:time_table/firebase/cloud_store.dart';
 import 'package:time_table/firebase/firebase_authentication.dart';
 import 'package:time_table/hive%20boxes/habit_box.dart';
@@ -53,8 +57,24 @@ class _SettingsPageState extends State<SettingsPage> {
     final habitbox = HabitBox.getHabitBox();
     final List<Habit> habits = habitbox.values.toList();
     if (habits.isNotEmpty) {
-      for (var habit in habits) {
-        cloudData.uploadHabitData(habit.toMap());
+      cloudData.deleteHabitData();
+
+      try {
+        for (var habit in habits) {
+          cloudData.uploadHabitData(habit.toMap());
+        }
+      } on PlatformException catch (e) {
+        showExceptionAlertDialog(context,
+            title: "Unknown Error Occured", exception: e);
+      } on SocketException catch (e) {
+        showExceptionAlertDialog(context,
+            title: "Please connect To the Internet", exception: e);
+      } on firebaseAuth.FirebaseException catch (e) {
+        showExceptionAlertDialog(context,
+            title: "Something Went Wrong ", exception: e);
+      } on Exception catch (e) {
+        showExceptionAlertDialog(context,
+            title: "Something Went Wrong ", exception: e);
       }
     }
   }
@@ -63,9 +83,35 @@ class _SettingsPageState extends State<SettingsPage> {
     final CloudData cloudData = Provider.of<CloudData>(context, listen: false);
     final restoredHabits = await cloudData.getHabitData();
     if (restoredHabits != []) {
-      for (var habit in restoredHabits) {
-        HabitBox.getHabitBox().put(habit.title, habit);
+      try {
+        for (var habit in restoredHabits) {
+          HabitBox.getHabitBox().put(habit.title, habit);
+        }
+      } on PlatformException catch (e) {
+        showExceptionAlertDialog(context,
+            title: "Unknown Error Occured", exception: e);
+      } on SocketException catch (e) {
+        showExceptionAlertDialog(context,
+            title: "Please connect To the Internet", exception: e);
+      } on firebaseAuth.FirebaseException catch (e) {
+        showExceptionAlertDialog(context,
+            title: "Something Went Wrong ", exception: e);
+      } on Exception catch (e) {
+        showExceptionAlertDialog(context,
+            title: "Something Went Wrong ", exception: e);
       }
+    }
+  }
+
+  void _googleSignIn(BuildContext context) {
+    try {
+      FirebaseAuthentication.signInWithGoogle();
+    } on SocketException catch (e) {
+      showExceptionAlertDialog(context,
+          title: "Please connect to Internet ", exception: e);
+    } on firebaseAuth.FirebaseAuthException catch (e) {
+      showExceptionAlertDialog(context,
+          title: "Something Went Wrong ", exception: e);
     }
   }
 
@@ -268,7 +314,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         if (uid == "") {
                           return InkWell(
                             onTap: () {
-                              FirebaseAuthentication.signInWithGoogle();
+                              _googleSignIn(context);
                             },
                             child: Container(
                               padding: EdgeInsets.all(10),
