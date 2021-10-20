@@ -31,15 +31,31 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
   @override
   void initState() {
     super.initState();
-    diffDate = DateTime.now().difference(widget.habit.dateCreated!).inDays + 1;
+
+    _setCalendarMarker();
+    _calculateStats();
+  }
+
+  void _calculateStats() {
+    DateTime createdDate = DateTime(widget.habit.dateCreated!.year,
+        widget.habit.dateCreated!.month, widget.habit.dateCreated!.day);
+
+    DateTime now =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    print(createdDate);
+    print(now);
+    diffDate = now.difference(createdDate).inDays + 1;
+    completeionPecent =
+        ((widget.habit.completedDates!.length) / diffDate * 100);
+  }
+
+  void _setCalendarMarker() {
     widget.habit.completedDates!.forEach((date) {
       selectedEvents[date] = ["Completed"];
     });
     widget.habit.skipDates!.forEach((date) {
       selectedEvents[date] = ["Skiped"];
     });
-    completeionPecent =
-        ((widget.habit.completedDates!.length) / diffDate * 100);
   }
 
   List<String> _getCompletedEvents(DateTime date) {

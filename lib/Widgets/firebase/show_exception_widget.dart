@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:time_table/Widgets/firebase/show_alert_dialog.dart';
 
 Future<void> showExceptionAlertDialog(
@@ -17,6 +20,8 @@ Future<void> showExceptionAlertDialog(
 String? _message(Exception exception) {
   if (exception is FirebaseException) {
     return exception.message;
+  } else if (exception is PlatformException || exception is SocketException) {
+    return "Please, Connect to the Internet";
   }
-  return exception.toString();
+  return "Please try Again after some time";
 }

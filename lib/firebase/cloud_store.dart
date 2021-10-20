@@ -15,7 +15,7 @@ class CloudData {
     try {
       final DocumentReference<Map<String, dynamic>> cloudRef =
           _firestore.doc(habitpath);
-
+      print(habitpath);
       await cloudRef.set(habit);
     } catch (e) {
       throw e;
@@ -28,13 +28,13 @@ class CloudData {
     try {
       QuerySnapshot allDocuments = await _firestore.collection(habitpath).get();
       for (DocumentSnapshot doc in allDocuments.docs) {
-        print(doc.reference.path);
+        print("delete");
         final DocumentReference<Map<String, dynamic>> cloudRef =
             _firestore.doc(doc.reference.path);
         cloudRef.delete();
       }
     } catch (e) {
-      print(e);
+      throw e;
     }
   }
 

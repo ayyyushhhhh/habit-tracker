@@ -57,31 +57,40 @@ class _SettingsPageState extends State<SettingsPage> {
     final habitbox = HabitBox.getHabitBox();
     final List<Habit> habits = habitbox.values.toList();
     if (habits.isNotEmpty) {
-      cloudData.deleteHabitData();
+      openLoadingScafold(message: "Creating Backup");
+      await cloudData.deleteHabitData();
 
       try {
         for (var habit in habits) {
-          cloudData.uploadHabitData(habit.toMap());
+          await cloudData.uploadHabitData(habit.toMap());
         }
+        ScaffoldMessenger.of(context).clearSnackBars();
       } on PlatformException catch (e) {
         showExceptionAlertDialog(context,
             title: "Unknown Error Occured", exception: e);
+        ScaffoldMessenger.of(context).clearSnackBars();
       } on SocketException catch (e) {
         showExceptionAlertDialog(context,
             title: "Please connect To the Internet", exception: e);
+        ScaffoldMessenger.of(context).clearSnackBars();
       } on firebaseAuth.FirebaseException catch (e) {
         showExceptionAlertDialog(context,
             title: "Something Went Wrong ", exception: e);
+        ScaffoldMessenger.of(context).clearSnackBars();
       } on Exception catch (e) {
         showExceptionAlertDialog(context,
             title: "Something Went Wrong ", exception: e);
+        ScaffoldMessenger.of(context).clearSnackBars();
       }
     }
   }
 
   Future<void> restoreBackup(BuildContext context) async {
     final CloudData cloudData = Provider.of<CloudData>(context, listen: false);
+    openLoadingScafold(message: "Restoring");
+
     final restoredHabits = await cloudData.getHabitData();
+    ScaffoldMessenger.of(context).clearSnackBars();
     if (restoredHabits != []) {
       try {
         for (var habit in restoredHabits) {
@@ -89,33 +98,62 @@ class _SettingsPageState extends State<SettingsPage> {
         }
       } on PlatformException catch (e) {
         showExceptionAlertDialog(context,
-            title: "Unknown Error Occured", exception: e);
+            title: "No Internet Connection", exception: e);
+        ScaffoldMessenger.of(context).clearSnackBars();
       } on SocketException catch (e) {
         showExceptionAlertDialog(context,
-            title: "Please connect To the Internet", exception: e);
+            title: "No Internet Connection", exception: e);
+        ScaffoldMessenger.of(context).clearSnackBars();
       } on firebaseAuth.FirebaseException catch (e) {
         showExceptionAlertDialog(context,
             title: "Something Went Wrong ", exception: e);
+        ScaffoldMessenger.of(context).clearSnackBars();
       } on Exception catch (e) {
         showExceptionAlertDialog(context,
             title: "Something Went Wrong ", exception: e);
+        ScaffoldMessenger.of(context).clearSnackBars();
       }
     }
   }
 
-  void _googleSignIn(BuildContext context) {
+  void _googleSignIn(BuildContext context) async {
     try {
-      FirebaseAuthentication.signInWithGoogle();
+      openLoadingScafold(message: "Signing In");
+      await FirebaseAuthentication.signInWithGoogle();
+      ScaffoldMessenger.of(context).clearSnackBars();
+    } on PlatformException catch (e) {
+      showExceptionAlertDialog(context,
+          title: "No Internet Connection", exception: e);
+      ScaffoldMessenger.of(context).clearSnackBars();
     } on SocketException catch (e) {
       showExceptionAlertDialog(context,
-          title: "Please connect to Internet ", exception: e);
+          title: "No Internet Connection", exception: e);
+      ScaffoldMessenger.of(context).clearSnackBars();
     } on firebaseAuth.FirebaseAuthException catch (e) {
       showExceptionAlertDialog(context,
           title: "Something Went Wrong ", exception: e);
+      ScaffoldMessenger.of(context).clearSnackBars();
     }
   }
 
-  void saveProfilePhoto(BuildContext context, double deviceWidth) async {
+  void openLoadingScafold({required String message}) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Row(
+        children: [
+          CircularProgressIndicator(
+            color: Colors.blue,
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Text(message),
+        ],
+      ),
+      duration: const Duration(seconds: 50),
+    ));
+  }
+
+  void openEditScafold(BuildContext context, double deviceWidth) async {
     _controller = _scaffoldKey.currentState!.showBottomSheet<void>(
       (BuildContext context) {
         return SingleChildScrollView(
@@ -269,7 +307,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            saveProfilePhoto(context, deviceWidth);
+                            openEditScafold(context, deviceWidth);
                           },
                           child: CircleAvatar(
                             radius: deviceWidth / 8,
@@ -317,15 +355,31 @@ class _SettingsPageState extends State<SettingsPage> {
                               _googleSignIn(context);
                             },
                             child: Container(
-                              padding: EdgeInsets.all(10),
                               width: double.infinity,
+                              height: deviceWidth / 9,
                               decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.blueAccent,
                               ),
-                              child: Text(
-                                "Sign In With Google",
-                                style: Theme.of(context).textTheme.headline6,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: deviceWidth / 9,
+                                    width: deviceWidth / 9,
+                                    color: Colors.white,
+                                    child:
+                                        Image.asset("assets/images/google.png"),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    "Sign In With Google",
+                                    style: TextStyle(
+                                        fontSize: deviceWidth / 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
                             ),
                           );

@@ -58,7 +58,6 @@ class FirebaseAuthentication {
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } on PlatformException catch (e) {
-      print(e);
       throw e;
     }
   }
