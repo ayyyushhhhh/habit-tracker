@@ -2,10 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class FirebaseAuthentication {
   static late FirebaseAuth _auth; //FirebaseAuth instance
 
-  static initFirebaseAuth() {
+  static void initFirebaseAuth() {
     _auth = FirebaseAuth.instance;
   }
 
@@ -24,7 +25,7 @@ class FirebaseAuthentication {
   }
 
   static bool isLoggedIn() {
-    User? user = _auth.currentUser;
+    final User? user = _auth.currentUser;
     if (user != null) {
       return true;
     }
@@ -35,8 +36,7 @@ class FirebaseAuthentication {
     try {
       await _auth.signOut();
     } catch (e) {
-      print(e);
-      throw e;
+      rethrow;
     }
   }
 
@@ -57,8 +57,8 @@ class FirebaseAuthentication {
 
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
-    } on PlatformException catch (e) {
-      throw e;
+    } on PlatformException {
+      rethrow;
     }
   }
 }

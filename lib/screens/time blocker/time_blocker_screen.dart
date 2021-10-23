@@ -31,16 +31,17 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // ignore: avoid_unnecessary_containers
                   Container(
                     child: Text(
-                      'Let\'s Plan \nYour Day',
+                      "Let's Plan \nYour Day",
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: _deviceWidth / 12,
@@ -49,7 +50,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   InkWell(
@@ -57,7 +58,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            return AddBlockScreen();
+                            return const AddBlockScreen();
                           },
                         ),
                       );
@@ -73,47 +74,55 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                         child: Text(
                           "Add Task",
                           style: TextStyle(
-                              fontSize: _deviceWidth / 25,
-                              fontWeight: FontWeight.w700),
+                            fontSize: _deviceWidth / 25,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ),
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               _buildCalendar(),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Expanded(
                 child: Consumer<TasksNotifier>(
                   builder: (BuildContext context, value, Widget? child) {
-                    List<String> tasks = TasksData.getSavedTask(
-                        DateFormat.yMMMMd("en_US").format(_selectedDate));
+                    final List<String> tasks = TasksData.getSavedTask(
+                      DateFormat.yMMMMd("en_US").format(_selectedDate),
+                    );
 
-                    List<Tasks> decodedTasks = [];
-                    tasks.forEach((task) {
-                      decodedTasks.add(Tasks.fromJson(json.decode(task)));
-                    });
+                    final List<Tasks> decodedTasks = [];
+                    for (final task in tasks) {
+                      decodedTasks.add(
+                        Tasks.fromJson(
+                          json.decode(task) as Map<String, dynamic>,
+                        ),
+                      );
+                    }
                     decodedTasks.sort((a, b) {
                       if (a.from.contains("m")) {
                         final format = DateFormat.jm();
-                        TimeOfDay afromTime =
+                        final TimeOfDay afromTime =
                             TimeOfDay.fromDateTime(format.parse(a.from));
-                        TimeOfDay bfromTime =
+                        final TimeOfDay bfromTime =
                             TimeOfDay.fromDateTime(format.parse(b.from));
-                        double aTime = afromTime.hour + afromTime.minute / 60.0;
-                        double bTime = bfromTime.hour + bfromTime.minute / 60.0;
+                        final double aTime =
+                            afromTime.hour + afromTime.minute / 60.0;
+                        final double bTime =
+                            bfromTime.hour + bfromTime.minute / 60.0;
                         return aTime.compareTo(bTime);
                       } else {
                         return a.from.compareTo(b.from);
                       }
                     });
                     if (decodedTasks.isEmpty) {
-                      return Center(
+                      return const Center(
                         child: Text("No Work Today"),
                       );
                     } else {
@@ -153,97 +162,99 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
     );
     taskList.removeAt(index);
     taskNotifier.saveTasksList(
-        DateFormat.yMMMMd("en_US").format(_selectedDate), taskList);
+      DateFormat.yMMMMd("en_US").format(_selectedDate),
+      taskList,
+    );
   }
 
-  Container _buildCalendar() {
-    return Container(
-      child: TableCalendar(
-        headerStyle:
-            HeaderStyle(formatButtonVisible: false, titleCentered: true),
-        calendarFormat: CalendarFormat.week,
-        focusedDay: DateTime.now(),
-        firstDay: DateTime(2019, 06, 13),
-        lastDay: DateTime(2022, 12, 31),
-        selectedDayPredicate: (day) {
-          return isSameDay(_selectedDate, day);
+  TableCalendar _buildCalendar() {
+    return TableCalendar(
+      headerStyle:
+          const HeaderStyle(formatButtonVisible: false, titleCentered: true),
+      calendarFormat: CalendarFormat.week,
+      focusedDay: DateTime.now(),
+      firstDay: DateTime(2019, 06, 13),
+      lastDay: DateTime(2022, 12, 31),
+      selectedDayPredicate: (day) {
+        return isSameDay(_selectedDate, day);
+      },
+      onDaySelected: (selectedDay, focusedDay) {
+        setState(() {
+          final tasksProv = Provider.of<TasksNotifier>(context, listen: false);
+          _selectedDate = selectedDay;
+          tasksProv.updateTasksList(
+            DateFormat.yMMMd("en_us").format(_selectedDate),
+          );
+        });
+      },
+      calendarBuilders: CalendarBuilders(
+        todayBuilder: (context, dateTime, datetime) {
+          return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.purple.shade100,
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    DateFormat.E().format(datetime),
+                    style: TextStyle(
+                      color: Colors.black45,
+                      fontSize: _deviceWidth / 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    DateFormat.d().format(datetime),
+                    style: TextStyle(
+                      //color: Colors.white,
+                      fontSize: _deviceWidth / 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
         },
-        onDaySelected: (selectedDay, focusedDay) {
-          setState(() {
-            final tasksProv =
-                Provider.of<TasksNotifier>(context, listen: false);
-            _selectedDate = selectedDay;
-            tasksProv.updateTasksList(
-                DateFormat.yMMMd("en_us").format(_selectedDate));
-          });
+        defaultBuilder: (context, dateTime, date) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  DateFormat.E().format(dateTime),
+                  style: TextStyle(
+                    color: Colors.blueGrey,
+                    fontSize: _deviceWidth / 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  DateFormat.d().format(dateTime),
+                  style: TextStyle(
+                    //color: Colors.white,
+                    fontSize: _deviceWidth / 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          );
         },
-        calendarBuilders: CalendarBuilders(
-          todayBuilder: (context, dateTime, datetime) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.purple.shade100,
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      DateFormat.E().format(datetime),
-                      style: TextStyle(
-                          color: Colors.black45,
-                          fontSize: _deviceWidth / 25,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      DateFormat.d().format(datetime),
-                      style: TextStyle(
-                          //color: Colors.white,
-                          fontSize: _deviceWidth / 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-          defaultBuilder: (context, dateTime, date) {
-            return Container(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      DateFormat.E().format(dateTime),
-                      style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontSize: _deviceWidth / 25,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      DateFormat.d().format(dateTime),
-                      style: TextStyle(
-                          //color: Colors.white,
-                          fontSize: _deviceWidth / 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-          dowBuilder: (context, day) {
-            return Center(
-              child: Text(
-                "",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-            );
-          },
-        ),
+        dowBuilder: (context, day) {
+          return const Center(
+            child: Text(
+              "",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+          );
+        },
       ),
     );
   }

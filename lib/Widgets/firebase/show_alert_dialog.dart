@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-showAlertDialog(
+Future showAlertDialog(
   BuildContext context, {
   required String title,
   required String content,

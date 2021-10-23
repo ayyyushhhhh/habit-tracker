@@ -1,15 +1,16 @@
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class Prefrences {
   static SharedPreferences? preferences;
 
-  static void init() async {
+  static Future<void> init() async {
     preferences = await SharedPreferences.getInstance();
   }
 
   static String getDate() {
-    String? date = preferences!.getString("currentDate");
+    final String? date = preferences!.getString("currentDate");
     if (date == null) {
       Prefrences.saveDate(DateTime.now());
       return DateFormat('dd-MM-yyyy').format(DateTime.now());
@@ -17,36 +18,36 @@ class Prefrences {
     return date;
   }
 
-  static void saveDate(DateTime date) async {
-    String dateNow = DateFormat('dd-MM-yyyy').format(date);
+  static void saveDate(DateTime date) {
+    final String dateNow = DateFormat('dd-MM-yyyy').format(date);
     preferences!.setString("currentDate", dateNow);
   }
 
-  static void saveName(String name) async {
+  static void saveName(String name) {
     preferences!.setString("username", name);
   }
 
   static String getuserName() {
-    String? date = preferences!.getString("username");
+    final String? date = preferences!.getString("username");
 
     return date ?? "";
   }
 
-  static void saveTheme(int themeIndex) async {
+  static void saveTheme(int themeIndex) {
     preferences!.setInt("themeindex", themeIndex);
   }
 
   static int getSavedTheme() {
-    int? index = preferences!.getInt("themeindex");
+    final int? index = preferences!.getInt("themeindex");
     return index ?? 0;
   }
 
   static int getSavedDP() {
-    int? index = preferences!.getInt("imageIndex");
+    final int? index = preferences!.getInt("imageIndex");
     return index ?? 1;
   }
 
-  static void saveDP(int imageIndex) async {
+  static void saveDP(int imageIndex) {
     preferences!.setInt("imageIndex", imageIndex);
   }
 }

@@ -1,8 +1,9 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class TasksData {
   static SharedPreferences? tasksPrefrences;
-  static void init() async {
+  static Future<void> init() async {
     tasksPrefrences = await SharedPreferences.getInstance();
   }
 
@@ -25,7 +26,7 @@ class TasksData {
   }
 
   static dynamic getTimeLocale() {
-    int? is24 = tasksPrefrences!.getInt("is24");
+    final int? is24 = tasksPrefrences!.getInt("is24");
     if (is24 == null) {
       return "";
     }
