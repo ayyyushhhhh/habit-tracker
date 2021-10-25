@@ -10,40 +10,55 @@ class CloudData {
   }
 
   Future<void> uploadHabitData(Map<String, dynamic> habit) async {
-    String habitpath = "$uid/Habits/HabitData/${habit["title"]}";
+    final String habitpath = "$uid/Habits/HabitData/${habit["title"]}";
+
     try {
       final DocumentReference<Map<String, dynamic>> cloudRef =
           _firestore.doc(habitpath);
+
       await cloudRef.set(habit);
     } catch (e) {
-      print(e);
-      throw e;
+      rethrow;
+    }
+  }
+
+  Future<void> deleteHabitData() async {
+    final String habitpath = "$uid/Habits/HabitData";
+
+    try {
+      final QuerySnapshot allDocuments =
+          await _firestore.collection(habitpath).get();
+      for (final DocumentSnapshot doc in allDocuments.docs) {
+        final DocumentReference<Map<String, dynamic>> cloudRef =
+            _firestore.doc(doc.reference.path);
+        cloudRef.delete();
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 
   Future<void> uploadTasksData(Map<String, dynamic> task) async {
-    String habitpath = "$uid/Tasks/TaskData/${task["title"]}";
+    final String habitpath = "$uid/Tasks/TaskData/${task["title"]}";
     final DocumentReference<Map<String, dynamic>> cloudRef =
         _firestore.doc(habitpath);
     await cloudRef.set(task);
   }
 
   Future<List<Habit>> getHabitData() async {
-    String habitpath = "$uid/Habits/HabitData";
+    final String habitpath = "$uid/Habits/HabitData";
     try {
-      CollectionReference refrence = _firestore.collection(habitpath);
-      QuerySnapshot habitSnapshot = await refrence.get();
-      List<Habit> restoredHabits = [];
+      final CollectionReference refrence = _firestore.collection(habitpath);
+      final QuerySnapshot habitSnapshot = await refrence.get();
+      final List<Habit> restoredHabits = [];
       final allData = habitSnapshot.docs.map((doc) => doc.data()).toList();
 
-      for (var data in allData) {
-        restoredHabits.add(Habit.fromMap(data as Map<String, dynamic>));
+      for (final data in allData) {
+        restoredHabits.add(Habit.fromMap(data! as Map<String, dynamic>));
       }
-
       return restoredHabits;
-    } catch (e) {
-      print(e);
-      throw e;
+    } on Exception {
+      rethrow;
     }
   }
 }

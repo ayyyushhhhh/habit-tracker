@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:time_table/Widgets/habit%20tracker/add_habit_card.dart';
 import 'package:time_table/Widgets/habit%20tracker/completed_habit_card.dart';
@@ -8,9 +9,7 @@ import 'package:time_table/models/habit_tracker/habit_model.dart';
 import 'package:time_table/screens/habit%20tracker/add_habit_screen.dart';
 import 'package:time_table/screens/habit%20tracker/habit_summary_screen.dart';
 import 'package:time_table/utils/habit%20tracker/habit_tracker_colors.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:time_table/utils/habit%20tracker/streak_cal.dart';
-
 import 'package:time_table/utils/user_info.dart';
 
 class HabitTrackerScreen extends StatefulWidget {
@@ -46,19 +45,20 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
             children: [
               _headWidget(),
               Container(
-                margin: EdgeInsets.only(left: 20),
+                margin: const EdgeInsets.only(left: 20),
                 child: Text(
                   "Let's make a Habit Today",
                   style: TextStyle(
-                      fontSize: devicewidth! / 15,
-                      fontWeight: FontWeight.w500,
-                      color: kHeadingTextColor),
+                    fontSize: devicewidth! / 15,
+                    fontWeight: FontWeight.w500,
+                    color: kHeadingTextColor,
+                  ),
                 ),
               ),
               ValueListenableBuilder<Box<Habit>>(
                 builder: (BuildContext context, box, Widget? child) {
                   final habits = box.values.toList().cast<Habit>();
-                  return Container(
+                  return SizedBox(
                     height: deviceHeight! / 2.2,
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -67,35 +67,42 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                       itemBuilder: (BuildContext context, int index) {
                         if (index == habits.length) {
                           return InkWell(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                    return AddHabitScreen();
-                                  }),
-                                );
-                              },
-                              child: InkWell(child: AddHabitcard()));
-                        }
-                        return InkWell(
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                    builder: (BuildContext context) {
-                                  return HabitSummaryScreen(
-                                      habit: calculateStreak(
-                                          habit: habits[index]));
-                                }),
+                                  builder: (BuildContext context) {
+                                    return AddHabitScreen();
+                                  },
+                                ),
                               );
                             },
-                            child: HabitCard(habit: habits[index]));
+                            child: InkWell(
+                              child: AddHabitcard(),
+                            ),
+                          );
+                        }
+                        return InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return HabitSummaryScreen(
+                                    habit:
+                                        calculateStreak(habit: habits[index]),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: HabitCard(habit: habits[index]),
+                        );
                       },
                     ),
                   );
                 },
                 valueListenable: HabitBox.getHabitBox().listenable(),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               _progressContainer(),
@@ -108,57 +115,59 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
 
   Widget _progressContainer() {
     return Container(
-        margin: EdgeInsets.only(top: 0, right: 20, left: 20, bottom: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Today's Progress",
-              style: TextStyle(
-                  fontSize: 34,
-                  color: Colors.purpleAccent.shade100,
-                  fontWeight: FontWeight.bold),
+      margin: const EdgeInsets.only(right: 20, left: 20, bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Today's Progress",
+            style: TextStyle(
+              fontSize: 34,
+              color: Colors.purpleAccent.shade100,
+              fontWeight: FontWeight.bold,
             ),
-            SizedBox(
-              height: 10,
-            ),
-            ValueListenableBuilder<Box<Habit>>(
-              builder: (BuildContext context, box, Widget? child) {
-                final habits = box.values.toList().cast<Habit>();
-                habits.retainWhere((habit) {
-                  if (habit.isDone == true) {
-                    return true;
-                  } else {
-                    return false;
-                  }
-                });
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: habits.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return CompletedHabitCard(
-                      completedHabit: habits[index],
-                    );
-                  },
-                );
-              },
-              valueListenable: HabitBox.getHabitBox().listenable(),
-            ),
-          ],
-        ));
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          ValueListenableBuilder<Box<Habit>>(
+            builder: (BuildContext context, box, Widget? child) {
+              final habits = box.values.toList().cast<Habit>();
+              habits.retainWhere((habit) {
+                if (habit.isDone == true) {
+                  return true;
+                } else {
+                  return false;
+                }
+              });
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: habits.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return CompletedHabitCard(
+                    completedHabit: habits[index],
+                  );
+                },
+              );
+            },
+            valueListenable: HabitBox.getHabitBox().listenable(),
+          ),
+        ],
+      ),
+    );
   }
 
   Align _headWidget() {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: Consumer<User>(
           builder: (context, user, child) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
+                SizedBox(
                   width: devicewidth! / 1.8,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,7 +195,8 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                 CircleAvatar(
                   radius: 50,
                   backgroundImage: AssetImage(
-                      "assets/profilePictures/${user.getProfilePic}.png"),
+                    "assets/profilePictures/${user.getProfilePic}.png",
+                  ),
                 ),
               ],
             );

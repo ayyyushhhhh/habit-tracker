@@ -40,29 +40,31 @@ class _AddNameScreenState extends State<AddNameScreen> {
                 Prefrences.saveDP(selectedIndex);
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return HomePage();
-                  }),
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return const HomePage();
+                    },
+                  ),
                 );
               } else {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) => CupertinoAlertDialog(
-                    title: new Text("Enter your Name"),
-                    content: new Text("Entered name is not valid"),
+                    title: const Text("Enter your Name"),
+                    content: const Text("Entered name is not valid"),
                     actions: [
                       CupertinoDialogAction(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text("Ok"),
+                        child: const Text("Ok"),
                       )
                     ],
                   ),
                 );
               }
             },
-            child: Text(
+            child: const Text(
               "Let's Go",
               style: TextStyle(fontSize: 24),
             ),
@@ -73,19 +75,18 @@ class _AddNameScreenState extends State<AddNameScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Container(
-              margin: EdgeInsets.all(20),
-              child: Text(
+              margin: const EdgeInsets.all(20),
+              child: const Text(
                 "Chose your Avatar",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Row(
@@ -98,7 +99,7 @@ class _AddNameScreenState extends State<AddNameScreen> {
                 imageAvatar(index: 5),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Row(
@@ -112,8 +113,8 @@ class _AddNameScreenState extends State<AddNameScreen> {
               ],
             ),
             Container(
-              margin: EdgeInsets.all(20),
-              child: Align(
+              margin: const EdgeInsets.all(20),
+              child: const Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Please Enter Your Name",
@@ -123,7 +124,7 @@ class _AddNameScreenState extends State<AddNameScreen> {
             ),
             Container(
               width: double.infinity,
-              margin: EdgeInsets.only(left: 20, right: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -133,17 +134,19 @@ class _AddNameScreenState extends State<AddNameScreen> {
                   userName = value;
                 },
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(20),
-                    fillColor: Colors.black12,
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none),
-                    hintText: "Enter Your First Name "),
+                  contentPadding: const EdgeInsets.all(20),
+                  fillColor: Colors.black12,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none,
+                  ),
+                  hintText: "Enter Your First Name ",
+                ),
                 maxLength: 10,
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Align(
               alignment: Alignment.bottomRight,
               child: Container(

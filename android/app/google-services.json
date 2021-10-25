@@ -15,11 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "478538304058-0d5csh3dils720bno5vrgbk9bnmogbla.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scarecrowhouse.activity_tracker",
+            "certificate_hash": "7140f65317d001ffa4ecdc551bd9d89ad87d8fc7"
+          }
+        },
+        {
           "client_id": "478538304058-ikf17q90l09vhfjg4gc8ing5t8mfktkr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.scarecrowhouse.activity_tracker",
             "certificate_hash": "dfe10a83de80851e29e0ef8b52628b9cb4009e50"
+          }
+        },
+        {
+          "client_id": "478538304058-j4rp124hbv5p01bs3odi9mau8raue6af.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scarecrowhouse.activity_tracker",
+            "certificate_hash": "8fb168fc948bbe52997b919dbaa7680500a80251"
           }
         },
         {

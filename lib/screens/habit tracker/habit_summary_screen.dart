@@ -26,24 +26,40 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
   late double deviceWidth;
   int diffDate = 0;
   double completeionPecent = 0.0;
-  ScreenshotController _screenshotController = ScreenshotController();
+  final ScreenshotController _screenshotController = ScreenshotController();
 
   @override
   void initState() {
     super.initState();
-    diffDate = DateTime.now().difference(widget.habit.dateCreated!).inDays + 1;
-    widget.habit.completedDates!.forEach((date) {
+
+    _setCalendarMarker();
+    _calculateStats();
+  }
+
+  void _calculateStats() {
+    final DateTime createdDate = DateTime(
+      widget.habit.dateCreated!.year,
+      widget.habit.dateCreated!.month,
+      widget.habit.dateCreated!.day,
+    );
+
+    final DateTime now =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+    diffDate = now.difference(createdDate).inDays + 1;
+    completeionPecent = (widget.habit.completedDates!.length) / diffDate * 100;
+  }
+
+  void _setCalendarMarker() {
+    for (final date in widget.habit.completedDates!) {
       selectedEvents[date] = ["Completed"];
-    });
-    widget.habit.skipDates!.forEach((date) {
+    }
+    for (final date in widget.habit.skipDates!) {
       selectedEvents[date] = ["Skiped"];
-    });
-    completeionPecent =
-        ((widget.habit.completedDates!.length) / diffDate * 100);
+    }
   }
 
   List<String> _getCompletedEvents(DateTime date) {
-    date = DateTime(date.year, date.month, date.day);
     return selectedEvents[date] ?? [];
   }
 
@@ -63,16 +79,17 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.arrow_back_ios_new),
+                icon: const Icon(Icons.arrow_back_ios_new),
               ),
-              flexibleSpace: FlexibleSpaceBar(
+              flexibleSpace: const FlexibleSpaceBar(
                 centerTitle: true,
                 title: Text(
                   "Habit Summary",
                   style: TextStyle(
-                      // fontSize: deviceWidth / 10,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.2),
+                    // fontSize: deviceWidth / 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.2,
+                  ),
                 ),
               ),
               actions: [
@@ -80,13 +97,13 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                   onPressed: () {
                     _deleteHabitBuilder(context);
                   },
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                 ),
                 IconButton(
                   onPressed: () {
                     _shareScreenshot(_screenshotController);
                   },
-                  icon: Icon(Icons.share),
+                  icon: const Icon(Icons.share),
                 ),
               ],
             ),
@@ -94,39 +111,44 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
               delegate: SliverChildListDelegate(
                 [
                   Container(
-                    margin: EdgeInsets.only(
-                        right: 20, left: 20, bottom: 20, top: 10),
+                    margin: const EdgeInsets.only(
+                      right: 20,
+                      left: 20,
+                      bottom: 20,
+                      top: 10,
+                    ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image.asset(
                           widget.habit.icon,
                           height: deviceHeight / 5,
                           width: deviceHeight / 5,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
                           widget.habit.title,
                           style: TextStyle(
-                              fontSize: deviceWidth / 15,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.purpleAccent.shade100),
+                            fontSize: deviceWidth / 15,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.purpleAccent.shade100,
+                          ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(bottom: 10),
+                          margin: const EdgeInsets.only(bottom: 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "It takes 21 Days to create Habit.",
                                 style: TextStyle(
-                                    fontSize: deviceWidth / 15,
-                                    fontWeight: FontWeight.w800,
-                                    color: kHeadingTextColor),
+                                  fontSize: deviceWidth / 15,
+                                  fontWeight: FontWeight.w800,
+                                  color: kHeadingTextColor,
+                                ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
@@ -141,27 +163,27 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                         ),
                         _habitCalendar(deviceHeight, deviceWidth),
                         calendarMarkers(),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
                           width: deviceWidth,
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: Color(0xFF03C8FE),
+                            color: const Color(0xFF03C8FE),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                margin: EdgeInsets.only(top: 10),
+                                margin: const EdgeInsets.only(top: 10),
                                 child: Text(
                                   "Since, ${DateFormat.yMMMMd('en_US').format(widget.habit.dateCreated!)}",
                                   style: TextStyle(
-                                      fontSize: deviceWidth / 15,
-                                      letterSpacing: 1.2,
-                                      fontWeight: FontWeight.bold),
+                                    fontSize: deviceWidth / 15,
+                                    letterSpacing: 1.2,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               _buildDataRow(
@@ -170,32 +192,36 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                                 headColor: Colors.blueAccent.shade700,
                               ),
                               _buildDataRow(
-                                  head: 'Completed Days',
-                                  data: widget.habit.completedDates!.length,
-                                  headColor: Colors.green.shade900),
+                                head: 'Completed Days',
+                                data: widget.habit.completedDates!.length,
+                                headColor: Colors.green.shade900,
+                              ),
                               _buildDataRow(
-                                  head: 'Skiped Days',
-                                  data: widget.habit.skipDates!.length,
-                                  headColor: Colors.red.shade900),
+                                head: 'Skiped Days',
+                                data: widget.habit.skipDates!.length,
+                                headColor: Colors.red.shade900,
+                              ),
                               _buildDataRow(
-                                  head: 'Completion Percentage',
-                                  data:
-                                      "${completeionPecent.toStringAsFixed(2)} %",
-                                  headColor: Colors.amberAccent),
+                                head: 'Completion Percentage',
+                                data:
+                                    "${completeionPecent.toStringAsFixed(2)} %",
+                                headColor: Colors.amberAccent,
+                              ),
                               Align(
                                 alignment: Alignment.topLeft,
                                 child: Container(
-                                  margin: EdgeInsets.only(top: 5),
+                                  margin: const EdgeInsets.only(top: 5),
                                   child: Text(
                                     completeionPecent < 30
                                         ? "You are a warrior fight back for the right track."
                                         : "Persitence is the key, You are on the right track.",
                                     style: TextStyle(
-                                        fontSize: deviceWidth / 20,
-                                        fontWeight: FontWeight.w700,
-                                        color: completeionPecent < 30
-                                            ? Colors.redAccent
-                                            : Colors.lightGreenAccent),
+                                      fontSize: deviceWidth / 20,
+                                      fontWeight: FontWeight.w700,
+                                      color: completeionPecent < 30
+                                          ? Colors.redAccent
+                                          : Colors.lightGreenAccent,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -220,23 +246,25 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
     required Color headColor,
   }) {
     return Container(
-      margin: EdgeInsets.only(top: 5),
+      margin: const EdgeInsets.only(top: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             head,
             style: TextStyle(
-                fontSize: deviceWidth / 20,
-                fontWeight: FontWeight.w600,
-                color: headColor),
+              fontSize: deviceWidth / 20,
+              fontWeight: FontWeight.w600,
+              color: headColor,
+            ),
           ),
           Text(
             data.toString(),
             style: TextStyle(
-                fontSize: deviceWidth / 20,
-                fontWeight: FontWeight.w500,
-                color: headColor),
+              fontSize: deviceWidth / 20,
+              fontWeight: FontWeight.w500,
+              color: headColor,
+            ),
           ),
         ],
       ),
@@ -245,52 +273,55 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
 
   Container calendarMarkers() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            child: Row(
-              children: [
-                Container(
-                  height: 20,
-                  width: 20,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.green),
+          Row(
+            children: [
+              Container(
+                height: 20,
+                width: 20,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.green,
                 ),
-                SizedBox(
-                  width: 20,
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Text(
+                "--- Habit Complete Dates",
+                style: TextStyle(
+                  fontSize: deviceWidth / 20,
+                  color: Colors.green,
                 ),
-                Text(
-                  "--- Habit Complete Dates",
-                  style: TextStyle(
-                      fontSize: deviceWidth / 20, color: Colors.green),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Container(
-            child: Row(
-              children: [
-                Container(
-                  height: 20,
-                  width: 20,
-                  decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+          Row(
+            children: [
+              Container(
+                height: 20,
+                width: 20,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.red,
                 ),
-                SizedBox(
-                  width: 20,
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Text(
+                "--- Habit Skip Dates",
+                style: TextStyle(
+                  fontSize: deviceWidth / 20,
+                  color: Colors.redAccent,
                 ),
-                Text(
-                  "--- Habit Skip Dates",
-                  style: TextStyle(
-                      fontSize: deviceWidth / 20, color: Colors.redAccent),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
@@ -302,8 +333,8 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
-        title: new Text("Delete Habit"),
-        content: new Text("Do You want To Delete this habit? "),
+        title: const Text("Delete Habit"),
+        content: const Text("Do You want To Delete this habit? "),
         actions: [
           CupertinoDialogAction(
             onPressed: () {
@@ -311,13 +342,13 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
               Navigator.pop(context);
               Navigator.pop(context);
             },
-            child: Text("Yes"),
+            child: const Text("Yes"),
           ),
           CupertinoDialogAction(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text("No"),
+            child: const Text("No"),
           ),
         ],
       ),
@@ -337,46 +368,54 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
 
   TableCalendar<Object> _buildHabitCalendar() {
     return TableCalendar(
-      firstDay: DateTime.utc(2021, 01, 01),
+      firstDay: DateTime.utc(2021),
       lastDay: DateTime.utc(2030, 3, 14),
       focusedDay: DateTime.now(),
       eventLoader: (day) {
         return _getCompletedEvents(day);
       },
-      headerStyle: HeaderStyle(formatButtonVisible: false, titleCentered: true),
-      calendarBuilders:
-          CalendarBuilders(markerBuilder: (context, date, events) {
-        if (widget.habit.completedDates!
-            .contains(DateTime(date.year, date.month, date.day))) {
-          return Container(
-            height: 10,
-            width: 10,
-            decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Colors.green),
-          );
-        } else if (widget.habit.skipDates!
-            .contains(DateTime(date.year, date.month, date.day))) {
-          return Container(
-            height: 10,
-            width: 10,
-            decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-          );
-        }
-      }),
+      headerStyle:
+          const HeaderStyle(formatButtonVisible: false, titleCentered: true),
+      calendarBuilders: CalendarBuilders(
+        markerBuilder: (context, date, events) {
+          if (widget.habit.completedDates!
+              .contains(DateTime(date.year, date.month, date.day))) {
+            return Container(
+              height: 10,
+              width: 10,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.green,
+              ),
+            );
+          } else if (widget.habit.skipDates!
+              .contains(DateTime(date.year, date.month, date.day))) {
+            return Container(
+              height: 10,
+              width: 10,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.red,
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 
-  void _shareScreenshot(ScreenshotController controller) async {
+  Future<void> _shareScreenshot(ScreenshotController controller) async {
     final imageBytes = await controller.captureFromWidget(_screenshotWidet());
     final directory = await getApplicationDocumentsDirectory();
     final image = File('${directory.path}/screenshot${DateTime.now()}.png');
     image.writeAsBytesSync(imageBytes);
-    String appURl =
+    const String appURl =
         "https://play.google.com/store/apps/details?id=com.scarecrowhouse.activity_tracker";
-    await Share.shareFiles([image.path],
-        text:
-            "Track and grow is helping me in building this habit. Download Track and grow - $appURl ");
+    await Share.shareFiles(
+      [image.path],
+      text:
+          "Track and grow is helping me in building this habit. Download Track and grow - $appURl ",
+    );
   }
 
   Widget _screenshotWidet() {
@@ -386,7 +425,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
         ),
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -398,35 +437,37 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                   height: deviceHeight / 7,
                   width: deviceHeight / 7,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Expanded(
-                  child: Container(
-                    child: Text(
-                      "I'm on ${widget.habit.streaks} day(s) streaks🔥 to create ${widget.habit.title} habit.",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  child: Text(
+                    "I'm on ${widget.habit.streaks} day(s) streaks🔥 to create ${widget.habit.title} habit.",
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Text(
+            const Text(
               "Here's my journey so far",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.purpleAccent.shade100),
-                child: _buildHabitCalendar()),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.purpleAccent.shade100,
+              ),
+              child: _buildHabitCalendar(),
+            ),
           ],
         ),
       ),

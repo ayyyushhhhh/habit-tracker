@@ -2,9 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:time_table/Notification%20Manager/notification_manager.dart';
+import 'package:time_table/firebase/cloud_store.dart';
 import 'package:time_table/firebase/firebase_authentication.dart';
 import 'package:time_table/hive%20boxes/habit_box.dart';
 import 'package:time_table/models/habit_tracker/habit_model.dart';
@@ -14,13 +15,16 @@ import 'package:time_table/utils/prefrences.dart';
 import 'package:time_table/utils/theme_provider.dart';
 import 'package:time_table/utils/time%20block/time_block_prefrences.dart';
 import 'package:time_table/utils/user_info.dart';
+// ignore: depend_on_referenced_packages
 import 'package:timezone/data/latest.dart' as tz;
-import 'Notification Manager/notification_manager.dart';
+
+import 'firebase/firebase_authentication.dart';
 import 'models/time_blocker/time_block_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   Prefrences.init();
   TasksData.init();
   FirebaseAuthentication.initFirebaseAuth();
@@ -38,10 +42,10 @@ class MyApp extends StatelessWidget {
     if (Prefrences.getDate() !=
         DateFormat('dd-MM-yyyy').format(DateTime.now())) {
       final myBox = HabitBox.getHabitBox();
-      List<Habit> allHabits = myBox.values.toList().cast<Habit>();
-      allHabits.forEach((habit) {
+      final List<Habit> allHabits = myBox.values.toList().cast<Habit>();
+      for (final habit in allHabits) {
         myBox.put(habit.title, habit.updateWith(isCompleted: false));
-      });
+      }
       Prefrences.saveDate(DateTime.now());
     }
   }
@@ -64,13 +68,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
+        Provider<CloudData>(
+          create: (context) => CloudData(),
+        )
       ],
       child: Consumer<ThemeManager>(
         builder: (BuildContext context, value, Widget? child) => MaterialApp(
-          title: 'Habit Tracker',
+          title: 'Track and Grow',
           debugShowCheckedModeBanner: false,
           theme: value.appTheme,
-          home: Prefrences.getuserName() == "" ? AddNameScreen() : HomePage(),
+          home: Prefrences.getuserName() == ""
+              ? const AddNameScreen()
+              : const HomePage(),
         ),
       ),
     );

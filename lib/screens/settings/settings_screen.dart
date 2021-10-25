@@ -1,6 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:time_table/Widgets/firebase/show_exception_widget.dart';
 import 'package:time_table/firebase/cloud_store.dart';
 import 'package:time_table/firebase/firebase_authentication.dart';
 import 'package:time_table/hive%20boxes/habit_box.dart';
@@ -19,7 +25,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  PersistentBottomSheetController? _controller; // <------ Instance variable
+  late PersistentBottomSheetController?
+      _controller; // <------ Instance variable
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String name = Prefrences.getuserName();
   int selectedIndex = Prefrences.getSavedDP();
@@ -33,18 +40,21 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void openPlayStore() {
-    String url =
+    const String url =
         "https://play.google.com/store/apps/details?id=com.scarecrowhouse.activity_tracker";
     Utils.openLinks(url: Uri.encodeFull(url));
   }
 
   void openMail() {
     Utils.openEmail(
-        to: "scarecrowhouse7@gmail.com", subject: "Feeback for Track and grow");
+      to: "scarecrowhouse7@gmail.com",
+      subject: "Feeback for Track and grow",
+    );
   }
 
   void openPrivacyPolicy() {
-    String url = "https://trackandgrow.blogspot.com/2021/07/privacypolicy.html";
+    const String url =
+        "https://trackandgrow.blogspot.com/2021/07/privacypolicy.html";
     Utils.openLinks(url: Uri.encodeFull(url));
   }
 
@@ -53,38 +63,158 @@ class _SettingsPageState extends State<SettingsPage> {
     final habitbox = HabitBox.getHabitBox();
     final List<Habit> habits = habitbox.values.toList();
     if (habits.isNotEmpty) {
-      for (var habit in habits) {
-        cloudData.uploadHabitData(habit.toMap());
+      openLoadingScafold(message: "Creating Backup");
+      await cloudData.deleteHabitData();
+
+      try {
+        for (final habit in habits) {
+          await cloudData.uploadHabitData(habit.toMap());
+        }
+
+        ScaffoldMessenger.of(context).clearSnackBars();
+      } on PlatformException catch (e) {
+        showExceptionAlertDialog(
+          context,
+          title: "Unknown Error Occured",
+          exception: e,
+        );
+
+        ScaffoldMessenger.of(context).clearSnackBars();
+      } on SocketException catch (e) {
+        showExceptionAlertDialog(
+          context,
+          title: "Please connect To the Internet",
+          exception: e,
+        );
+        ScaffoldMessenger.of(context).clearSnackBars();
+      } on firebase_auth.FirebaseException catch (e) {
+        showExceptionAlertDialog(
+          context,
+          title: "Something Went Wrong ",
+          exception: e,
+        );
+        ScaffoldMessenger.of(context).clearSnackBars();
+      } on Exception catch (e) {
+        showExceptionAlertDialog(
+          context,
+          title: "Something Went Wrong ",
+          exception: e,
+        );
+        ScaffoldMessenger.of(context).clearSnackBars();
       }
     }
   }
 
   Future<void> restoreBackup(BuildContext context) async {
     final CloudData cloudData = Provider.of<CloudData>(context, listen: false);
+    openLoadingScafold(message: "Restoring");
+
     final restoredHabits = await cloudData.getHabitData();
+    ScaffoldMessenger.of(context).clearSnackBars();
     if (restoredHabits != []) {
-      for (var habit in restoredHabits) {
-        HabitBox.getHabitBox().put(habit.title, habit);
+      try {
+        for (final habit in restoredHabits) {
+          HabitBox.getHabitBox().put(habit.title, habit);
+        }
+      } on PlatformException catch (e) {
+        showExceptionAlertDialog(
+          context,
+          title: "No Internet Connection",
+          exception: e,
+        );
+        ScaffoldMessenger.of(context).clearSnackBars();
+      } on SocketException catch (e) {
+        showExceptionAlertDialog(
+          context,
+          title: "No Internet Connection",
+          exception: e,
+        );
+        ScaffoldMessenger.of(context).clearSnackBars();
+      } on firebase_auth.FirebaseException catch (e) {
+        showExceptionAlertDialog(
+          context,
+          title: "Something Went Wrong ",
+          exception: e,
+        );
+        ScaffoldMessenger.of(context).clearSnackBars();
+      } on Exception catch (e) {
+        showExceptionAlertDialog(
+          context,
+          title: "Something Went Wrong ",
+          exception: e,
+        );
+        ScaffoldMessenger.of(context).clearSnackBars();
       }
     }
   }
 
-  void saveProfilePhoto(BuildContext context, double deviceWidth) async {
+  Future<void> _googleSignIn(BuildContext context) async {
+    try {
+      openLoadingScafold(message: "Signing In");
+      await FirebaseAuthentication.signInWithGoogle();
+      ScaffoldMessenger.of(context).clearSnackBars();
+    } on PlatformException catch (e) {
+      showExceptionAlertDialog(
+        context,
+        title: "No Internet Connection",
+        exception: e,
+      );
+      ScaffoldMessenger.of(context).clearSnackBars();
+    } on SocketException catch (e) {
+      showExceptionAlertDialog(
+        context,
+        title: "No Internet Connection",
+        exception: e,
+      );
+      ScaffoldMessenger.of(context).clearSnackBars();
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      showExceptionAlertDialog(
+        context,
+        title: "Something Went Wrong ",
+        exception: e,
+      );
+      ScaffoldMessenger.of(context).clearSnackBars();
+    }
+  }
+
+  void openLoadingScafold({required String message}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const CircularProgressIndicator(
+              color: Colors.blue,
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Text(message),
+          ],
+        ),
+        duration: const Duration(seconds: 50),
+      ),
+    );
+  }
+
+  Future<void> openEditScafold(BuildContext context, double deviceWidth) async {
     _controller = _scaffoldKey.currentState!.showBottomSheet<void>(
       (BuildContext context) {
         return SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.only(top: 20, bottom: 10, right: 10, left: 10),
+            padding:
+                const EdgeInsets.only(top: 20, bottom: 10, right: 10, left: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Divider(),
+                const Divider(),
                 Text(
                   "Enter your Name",
                   style: TextStyle(
-                      fontSize: deviceWidth / 14, fontWeight: FontWeight.bold),
+                    fontSize: deviceWidth / 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -99,23 +229,26 @@ class _SettingsPageState extends State<SettingsPage> {
                       }
                     },
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(20),
+                      contentPadding: const EdgeInsets.all(20),
                       fillColor: Colors.black12,
                       filled: true,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide.none),
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                     maxLength: 10,
                   ),
                 ),
-                Divider(),
+                const Divider(),
                 Text(
                   "Chose your Avatar",
                   style: TextStyle(
-                      fontSize: deviceWidth / 14, fontWeight: FontWeight.bold),
+                    fontSize: deviceWidth / 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -128,7 +261,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     imageAvatar(index: 5, deviceWidth: deviceWidth),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
@@ -141,7 +274,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     imageAvatar(index: 10, deviceWidth: deviceWidth),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -159,11 +292,12 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: Text(
                         "Save",
                         style: TextStyle(
-                            fontSize: deviceWidth / 24,
-                            fontWeight: FontWeight.bold),
+                          fontSize: deviceWidth / 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     GestureDetector(
@@ -173,8 +307,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: Text(
                         "Cancel",
                         style: TextStyle(
-                            fontSize: deviceWidth / 24,
-                            fontWeight: FontWeight.bold),
+                          fontSize: deviceWidth / 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -210,43 +345,43 @@ class _SettingsPageState extends State<SettingsPage> {
         key: _scaffoldKey,
         body: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.all(20),
-                padding: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(10),
                 child: Consumer<User>(
                   builder: (_, user, __) {
                     return Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         GestureDetector(
                           onTap: () {
-                            saveProfilePhoto(context, deviceWidth);
+                            openEditScafold(context, deviceWidth);
                           },
                           child: CircleAvatar(
                             radius: deviceWidth / 8,
                             backgroundColor: Colors.grey,
                             backgroundImage: AssetImage(
-                                'assets/profilePictures/${user.getProfilePic}.png'),
+                              'assets/profilePictures/${user.getProfilePic}.png',
+                            ),
                           ),
                         ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         Text(
                           user.getName,
                           style: TextStyle(
-                              fontSize: deviceWidth / 12,
-                              fontWeight: FontWeight.bold),
+                            fontSize: deviceWidth / 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         )
                       ],
                     );
                   },
                 ),
               ),
-              Divider(),
+              const Divider(),
               Container(
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   right: 20,
                   left: 20,
                   top: 7,
@@ -257,29 +392,49 @@ class _SettingsPageState extends State<SettingsPage> {
                     Text(
                       "Backup/Restore",
                       style: TextStyle(
-                          fontSize: deviceWidth / 14,
-                          fontWeight: FontWeight.bold),
+                        fontSize: deviceWidth / 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     StreamBuilder<String>(
                       stream: FirebaseAuthentication.getUserStream,
                       builder: (context, snapshot) {
-                        var uid = snapshot.data;
+                        final uid = snapshot.data;
                         if (uid == "") {
                           return InkWell(
                             onTap: () {
-                              FirebaseAuthentication.signInWithGoogle();
+                              _googleSignIn(context);
                             },
                             child: Container(
-                              padding: EdgeInsets.all(10),
                               width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(10),
+                              height: deviceWidth / 9,
+                              decoration: const BoxDecoration(
+                                color: Colors.blueAccent,
                               ),
-                              child: Text(
-                                "Sign In With Google",
-                                style: Theme.of(context).textTheme.headline6,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: deviceWidth / 9,
+                                    width: deviceWidth / 9,
+                                    color: Colors.white,
+                                    child:
+                                        Image.asset("assets/images/google.png"),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    "Sign In With Google",
+                                    style: TextStyle(
+                                      fontSize: deviceWidth / 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           );
@@ -292,7 +447,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               },
                               child: ListTile(
                                 contentPadding: EdgeInsets.zero,
-                                leading: Icon(Icons.cloud_download),
+                                leading: const Icon(Icons.cloud_download),
                                 title: Text(
                                   "Create Backup",
                                   style: TextStyle(fontSize: deviceWidth / 22),
@@ -305,7 +460,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               },
                               child: ListTile(
                                 contentPadding: EdgeInsets.zero,
-                                leading: Icon(Icons.restore),
+                                leading: const Icon(Icons.restore),
                                 title: Text(
                                   "Restore",
                                   style: TextStyle(fontSize: deviceWidth / 22),
@@ -319,9 +474,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                 ),
               ),
-              Divider(),
+              const Divider(),
               Container(
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   right: 20,
                   left: 20,
                   top: 7,
@@ -332,76 +487,82 @@ class _SettingsPageState extends State<SettingsPage> {
                     Text(
                       "App",
                       style: TextStyle(
-                          fontSize: deviceWidth / 14,
-                          fontWeight: FontWeight.bold),
+                        fontSize: deviceWidth / 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Consumer<ThemeManager>(
-                        builder: (BuildContext context, theme, Widget? child) {
-                      return ListTile(
-                        contentPadding: EdgeInsets.only(right: 20),
-                        leading: Icon(Prefrences.getSavedTheme() == 0
-                            ? Icons.dark_mode
-                            : Icons.light_mode),
-                        title: Text(
-                          "Dark/Light Mode",
-                          style: TextStyle(fontSize: deviceWidth / 22),
-                        ),
-                        trailing: CupertinoSwitch(
-                          value: Prefrences.getSavedTheme() == 0 ? true : false,
-                          onChanged: (value) {
-                            Prefrences.saveTheme(value ? 1 : 0);
-                            if (value == false) {
-                              theme.updateTheme(ThemeType.LightTheme);
-                            } else {
-                              theme.updateTheme(ThemeType.DarkTheme);
-                            }
-                          },
-                        ),
-                      );
-                    }),
+                      builder: (BuildContext context, theme, Widget? child) {
+                        return ListTile(
+                          contentPadding: const EdgeInsets.only(right: 20),
+                          leading: Icon(
+                            Prefrences.getSavedTheme() == 0
+                                ? Icons.dark_mode
+                                : Icons.light_mode,
+                          ),
+                          title: Text(
+                            "Dark/Light Mode",
+                            style: TextStyle(fontSize: deviceWidth / 22),
+                          ),
+                          trailing: CupertinoSwitch(
+                            value: Prefrences.getSavedTheme() == 0,
+                            onChanged: (value) {
+                              Prefrences.saveTheme(value ? 1 : 0);
+                              if (value == false) {
+                                theme.updateTheme(ThemeType.lightTheme);
+                              } else {
+                                theme.updateTheme(ThemeType.darkTheme);
+                              }
+                            },
+                          ),
+                        );
+                      },
+                    ),
                     StreamBuilder<String>(
-                        stream: FirebaseAuthentication.getUserStream,
-                        builder: (context, snapshot) {
-                          var uid = snapshot.data;
+                      stream: FirebaseAuthentication.getUserStream,
+                      builder: (context, snapshot) {
+                        final uid = snapshot.data;
 
-                          if (uid != "") {
-                            return InkWell(
-                              onTap: () {
-                                FirebaseAuthentication.signOut();
-                              },
-                              child: ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                leading: Icon(Icons.logout),
-                                title: Text(
-                                  "Logout",
-                                  style: TextStyle(fontSize: deviceWidth / 22),
-                                ),
+                        if (uid != "") {
+                          return InkWell(
+                            onTap: () {
+                              FirebaseAuthentication.signOut();
+                            },
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: const Icon(Icons.logout),
+                              title: Text(
+                                "Logout",
+                                style: TextStyle(fontSize: deviceWidth / 22),
                               ),
-                            );
-                          }
-                          return SizedBox(height: 0);
-                        }),
-                    Divider(),
+                            ),
+                          );
+                        }
+                        return const SizedBox(height: 0);
+                      },
+                    ),
+                    const Divider(),
                     Text(
                       "Help",
                       style: TextStyle(
-                          fontSize: deviceWidth / 14,
-                          fontWeight: FontWeight.bold),
+                        fontSize: deviceWidth / 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {
                         openMail();
                       },
                       child: ListTile(
-                        contentPadding: EdgeInsets.only(right: 20),
-                        leading: Icon(
+                        contentPadding: const EdgeInsets.only(right: 20),
+                        leading: const Icon(
                           Icons.mail,
                         ),
                         title: Text(
                           "Contact us",
                           style: TextStyle(fontSize: deviceWidth / 22),
                         ),
-                        subtitle: Text("Suggestions/Feedback/Bugs"),
+                        subtitle: const Text("Suggestions/Feedback/Bugs"),
                       ),
                     ),
                     GestureDetector(
@@ -409,20 +570,21 @@ class _SettingsPageState extends State<SettingsPage> {
                         openPrivacyPolicy();
                       },
                       child: ListTile(
-                        contentPadding: EdgeInsets.only(right: 20),
-                        leading: Icon(Icons.policy),
+                        contentPadding: const EdgeInsets.only(right: 20),
+                        leading: const Icon(Icons.policy),
                         title: Text(
                           "Privacy Policy",
                           style: TextStyle(fontSize: deviceWidth / 22),
                         ),
                       ),
                     ),
-                    Divider(),
+                    const Divider(),
                     Text(
                       "About",
                       style: TextStyle(
-                          fontSize: deviceWidth / 14,
-                          fontWeight: FontWeight.bold),
+                        fontSize: deviceWidth / 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -431,26 +593,26 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: ListTile(
                         contentPadding:
                             EdgeInsets.only(right: deviceWidth / 22),
-                        leading: Icon(
+                        leading: const Icon(
                           Icons.star,
                         ),
                         title: Text(
                           "Rate us",
                           style: TextStyle(fontSize: deviceWidth / 22),
                         ),
-                        subtitle: Text("Your 5 Stars means a lot"),
+                        subtitle: const Text("Your 5 Stars means a lot"),
                       ),
                     ),
                     ListTile(
-                      contentPadding: EdgeInsets.only(right: 20),
-                      leading: Icon(
+                      contentPadding: const EdgeInsets.only(right: 20),
+                      leading: const Icon(
                         Icons.info,
                       ),
                       title: Text(
                         "App Version",
                         style: TextStyle(fontSize: deviceWidth / 22),
                       ),
-                      subtitle: Text("3.0.1"),
+                      subtitle: const Text("4.0.1"),
                     ),
                   ],
                 ),

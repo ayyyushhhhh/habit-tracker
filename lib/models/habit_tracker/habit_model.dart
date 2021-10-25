@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
@@ -36,25 +38,27 @@ class Habit extends HiveObject {
   @HiveField(9)
   DateTime? dateCreated;
 
-  Habit(
-      {required this.title,
-      required this.icon,
-      this.isDone = false,
-      this.completedDates,
-      this.skipDates,
-      this.index,
-      this.lastIndex,
-      this.streaks,
-      this.dateCreated,
-      required this.description});
+  Habit({
+    required this.title,
+    required this.icon,
+    this.isDone = false,
+    this.completedDates,
+    this.skipDates,
+    this.index,
+    this.lastIndex,
+    this.streaks,
+    this.dateCreated,
+    required this.description,
+  });
 
-  Habit updateWith(
-      {bool? isCompleted,
-      DateTime? completeDate,
-      DateTime? skipDate,
-      int? streak,
-      int? index,
-      int? lastIndex}) {
+  Habit updateWith({
+    bool? isCompleted,
+    DateTime? completeDate,
+    DateTime? skipDate,
+    int? streak,
+    int? index,
+    int? lastIndex,
+  }) {
     if (completeDate != null) {
       completedDates!.add(completeDate);
     }
@@ -77,9 +81,9 @@ class Habit extends HiveObject {
   }
 
   Map<String, dynamic> toMap() {
-    var completedDatesMap = json
+    final completedDatesMap = json
         .encode(this.completedDates!.map((date) => date.toString()).toList());
-    var skipDatesMap =
+    final skipDatesMap =
         json.encode(this.skipDates!.map((date) => date.toString()).toList());
     return {
       'title': this.title,
@@ -95,28 +99,46 @@ class Habit extends HiveObject {
     };
   }
 
+  // ignore: prefer_constructors_over_static_methods
   static Habit fromMap(Map<String, dynamic> map) {
-    var compDates = jsonDecode(map['completedDates']);
-    var skipDates = jsonDecode(map['skipDates']);
-    List<DateTime> compDatesList = [];
-    for (var compDate in compDates) {
-      compDatesList.add(DateFormat("yyyy-MM-dd hh:mm:ss").parse(compDate));
+    final compDates = jsonDecode(map['completedDates'] as String);
+    final skipDates = jsonDecode(map['skipDates'] as String);
+    final List<DateTime> compDatesList = [];
+    for (final compDate in compDates) {
+      compDatesList
+          .add(DateFormat("yyyy-MM-dd hh:mm:ss").parse(compDate as String));
     }
-    List<DateTime> skipDatesList = [];
-    for (var skipDate in skipDates) {
-      skipDatesList.add(DateFormat("yyyy-MM-dd hh:mm:ss").parse(skipDate));
+    final List<DateTime> skipDatesList = [];
+    for (final skipDate in skipDates) {
+      skipDatesList
+          .add(DateFormat("yyyy-MM-dd hh:mm:ss").parse(skipDate as String));
     }
-    Habit habit = Habit(
-      title: map['title'],
-      icon: map['icon'],
-      isDone: map['isDone'],
-      description: map['description'],
-      dateCreated: DateFormat("yyyy-MM-dd hh:mm:ss").parse(map["dateCreated"]),
+    final lastDate = DateTime(
+      compDatesList.last.year,
+      compDatesList.last.month,
+      compDatesList.last.day,
+    );
+    final now = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
+    if (lastDate != now) {
+      map["isDone"] = false;
+    }
+
+    final Habit habit = Habit(
+      title: map['title'] as String,
+      icon: map['icon'] as String,
+      isDone: map['isDone'] as bool,
+      description: map['description'] as String,
+      dateCreated:
+          DateFormat("yyyy-MM-dd hh:mm:ss").parse(map["dateCreated"] as String),
       completedDates: compDatesList,
       skipDates: skipDatesList,
-      streaks: map['streaks'],
-      lastIndex: map['lastIndex'],
-      index: map['index'],
+      streaks: map['streaks'] as int,
+      lastIndex: map['lastIndex'] as int,
+      index: map['index'] as int,
     );
     return habit;
   }

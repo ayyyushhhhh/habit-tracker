@@ -6,7 +6,7 @@ class AddHabitcard extends StatelessWidget {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       height: deviceHeight / 15,
       width: deviceWidth / 2,
       decoration: BoxDecoration(
@@ -16,7 +16,6 @@ class AddHabitcard extends StatelessWidget {
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               Icons.add,
@@ -25,16 +24,18 @@ class AddHabitcard extends StatelessWidget {
             Text(
               "Click Here to Add",
               style: TextStyle(
-                  fontSize: deviceHeight / 50,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.blue),
+                fontSize: deviceHeight / 50,
+                fontWeight: FontWeight.w700,
+                color: Colors.blue,
+              ),
             ),
             Text(
               "Custom Habit",
               style: TextStyle(
-                  fontSize: deviceHeight / 40,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black),
+                fontSize: deviceHeight / 40,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+              ),
             )
           ],
         ),

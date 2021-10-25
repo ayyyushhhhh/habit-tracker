@@ -1,6 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:time_table/utils/prefrences.dart';
-import 'package:flutter/foundation.dart';
 
 class User extends ChangeNotifier {
   String name = Prefrences.getuserName();
@@ -14,13 +14,13 @@ class User extends ChangeNotifier {
     return profilePic.toString();
   }
 
-  void updateName(nameInput) {
+  void updateName(String nameInput) {
     Prefrences.saveName(nameInput);
     name = Prefrences.getuserName();
     notifyListeners();
   }
 
-  void updateDP(imageIndex) {
+  void updateDP(int imageIndex) {
     Prefrences.saveDP(imageIndex);
     profilePic = Prefrences.getSavedDP();
     notifyListeners();

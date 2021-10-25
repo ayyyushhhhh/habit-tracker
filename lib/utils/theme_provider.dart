@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:time_table/utils/prefrences.dart';
 
-enum ThemeType { DarkTheme, LightTheme }
+enum ThemeType { darkTheme, lightTheme }
 
 class ThemeManager with ChangeNotifier {
   List<ThemeData> appThemeData = [
@@ -15,7 +15,7 @@ class ThemeManager with ChangeNotifier {
             displayColor: Colors.white,
           ),
       primaryColor: Colors.teal.shade700,
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         color: Colors.teal,
         iconTheme: IconThemeData(
           color: Colors.white,
@@ -29,11 +29,11 @@ class ThemeManager with ChangeNotifier {
   }
 
   void updateTheme(ThemeType themeType) {
-    if (themeType == ThemeType.DarkTheme) {
+    if (themeType == ThemeType.darkTheme) {
       appTheme = appThemeData[0];
       Prefrences.saveTheme(0);
       notifyListeners();
-    } else if (themeType == ThemeType.LightTheme) {
+    } else if (themeType == ThemeType.lightTheme) {
       appTheme = appThemeData[1];
       Prefrences.saveTheme(1);
       notifyListeners();
