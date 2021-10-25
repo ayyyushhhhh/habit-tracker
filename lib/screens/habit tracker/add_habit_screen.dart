@@ -16,8 +16,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
 
   void _saveHabit() {
     if (_habitTitle.trimRight().isNotEmpty &&
-        _habitTitle.trimRight().isNotEmpty &&
-        _description.isNotEmpty) {
+        _description.trimRight().isNotEmpty &&
+        _habitIcon.isNotEmpty) {
       final Habit habit = Habit(
         title: _habitTitle,
         icon: _habitIcon,
@@ -35,7 +35,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
       Navigator.pop(context);
     } else if (_habitTitle.trimRight().isEmpty) {
       _showSnackbar(context, "Give some title", "ok!");
-    } else if (_habitTitle.trimRight().isEmpty) {
+    } else if (_description.trimRight().isEmpty) {
       _showSnackbar(context, "Give some description", "ok!");
     } else if (_habitIcon.isEmpty) {
       _showSnackbar(context, "Select an icon", "ok!");
