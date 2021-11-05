@@ -35,7 +35,8 @@ class _HabitCardState extends State<HabitCard> {
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(
       margin: const EdgeInsets.all(20),
-      height: deviceHeight / 10,
+      padding: EdgeInsets.all(10),
+      height: deviceHeight / 5,
       width: deviceWidth / 2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -52,8 +53,10 @@ class _HabitCardState extends State<HabitCard> {
             ),
             Text(
               widget.habit.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: deviceHeight / 25,
+                fontSize: deviceHeight / 28,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
               ),
@@ -66,6 +69,7 @@ class _HabitCardState extends State<HabitCard> {
               child: Text(
                 widget.habit.description,
                 maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: deviceWidth / 22,
                   fontWeight: FontWeight.w500,
@@ -73,13 +77,10 @@ class _HabitCardState extends State<HabitCard> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 2,
-            ),
+            Spacer(),
             Text(
               "(Click here for details)",
               style: TextStyle(fontSize: deviceWidth / 30, color: Colors.blue),
-              overflow: TextOverflow.ellipsis,
             ),
             Align(
               alignment: Alignment.bottomRight,

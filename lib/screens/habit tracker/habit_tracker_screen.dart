@@ -59,7 +59,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                 builder: (BuildContext context, box, Widget? child) {
                   final habits = box.values.toList().cast<Habit>();
                   return SizedBox(
-                    height: deviceHeight! / 2.2,
+                    height: deviceHeight! / 2,
                     child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,

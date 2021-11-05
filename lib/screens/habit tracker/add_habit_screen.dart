@@ -121,7 +121,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                               ),
                               hintText: "Enter Habit title eg,Running",
                             ),
-                            maxLength: 10,
+                            // maxLength: 20,
                           ),
                         ),
                         Text(
@@ -152,7 +152,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                               hintText:
                                   "Add a little description eg, run 10 km ",
                             ),
-                            maxLength: 20,
+                            // maxLength: 40,
                           ),
                         ),
                         Text(

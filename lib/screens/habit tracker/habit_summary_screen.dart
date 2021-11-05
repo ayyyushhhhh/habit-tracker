@@ -129,10 +129,23 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                         ),
                         Text(
                           widget.habit.title,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 5,
                           style: TextStyle(
                             fontSize: deviceWidth / 15,
                             fontWeight: FontWeight.w700,
                             color: Colors.purpleAccent.shade100,
+                          ),
+                        ),
+                        Text(
+                          widget.habit.description,
+                          maxLines: 5,
+                          textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: deviceWidth / 20,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
                           ),
                         ),
                         Container(

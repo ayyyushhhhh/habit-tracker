@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:time_table/utils/prefrences.dart';
 
 enum ThemeType { darkTheme, lightTheme }
