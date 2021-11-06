@@ -99,3 +99,65 @@ class _HabitCardState extends State<HabitCard> {
     );
   }
 }
+
+// class HabitCard extends StatefulWidget {
+//   final Habit habit;
+
+//   const HabitCard({required this.habit});
+
+//   @override
+//   _HabitCardState createState() => _HabitCardState();
+// }
+
+// class _HabitCardState extends State<HabitCard> {
+//   @override
+//   Widget build(BuildContext context) {
+//     final deviceHeight = MediaQuery.of(context).size.height;
+//     final deviceWidth = MediaQuery.of(context).size.width;
+//     return Column(
+//       children: [
+//         Container(
+//           height: deviceHeight / 4,
+//           width: deviceHeight / 4,
+//           margin: const EdgeInsets.all(20),
+//           padding: EdgeInsets.all(10),
+//           decoration: BoxDecoration(
+//             shape: BoxShape.circle,
+//             color: kcardColor,
+//           ),
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//               CircleAvatar(
+//                 radius: 40,
+//                 child: Image.asset(widget.habit.icon),
+//               ),
+//               SizedBox(
+//                 height: 10,
+//               ),
+//               CircleAvatar(
+//                 radius: 15,
+//                 backgroundColor: Colors.green,
+//                 child: Text(
+//                   widget.habit.streaks.toString(),
+//                   style: TextStyle(color: Colors.white),
+//                 ),
+//               )
+//             ],
+//           ),
+//         ),
+//         SizedBox(
+//           height: 2,
+//         ),
+//         Text(
+//           widget.habit.title,
+//           style: TextStyle(
+//             fontSize: 20,
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

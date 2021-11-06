@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_table/utils/habit%20tracker/habit_tracker_colors.dart';
 
 class AddHabitcard extends StatelessWidget {
   @override
@@ -43,3 +44,47 @@ class AddHabitcard extends StatelessWidget {
     );
   }
 }
+
+// class AddHabitcard extends StatelessWidget {
+//   const AddHabitcard({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final deviceHeight = MediaQuery.of(context).size.height;
+//     // final deviceWidth = MediaQuery.of(context).size.width;
+//     return Column(
+//       children: [
+//         Container(
+//           height: deviceHeight / 4,
+//           width: deviceHeight / 4,
+//           margin: const EdgeInsets.all(20),
+//           padding: EdgeInsets.all(10),
+//           decoration: BoxDecoration(
+//             shape: BoxShape.circle,
+//             color: kprimaryColor,
+//           ),
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//               Icon(
+//                 Icons.add,
+//                 size: 80,
+//               ),
+//             ],
+//           ),
+//         ),
+//         SizedBox(
+//           height: 2,
+//         ),
+//         Text(
+//           "Add Habit",
+//           style: TextStyle(
+//             fontSize: 20,
+//             fontWeight: FontWeight.bold,
+//           ),
+//         )
+//       ],
+//     );
+//   }
+// }

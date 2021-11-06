@@ -59,14 +59,14 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                 builder: (BuildContext context, box, Widget? child) {
                   final habits = box.values.toList().cast<Habit>();
                   return SizedBox(
-                    height: deviceHeight! / 2,
-                    child: ListView.builder(
+                    child: GridView.builder(
                       shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
+                      physics: ScrollPhysics(),
+                      scrollDirection: Axis.vertical,
                       itemCount: habits.length + 1,
                       itemBuilder: (BuildContext context, int index) {
                         if (index == habits.length) {
-                          return InkWell(
+                          return GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -76,7 +76,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                                 ),
                               );
                             },
-                            child: InkWell(
+                            child: GestureDetector(
                               child: AddHabitcard(),
                             ),
                           );
@@ -97,6 +97,10 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                           child: HabitCard(habit: habits[index]),
                         );
                       },
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.85,
+                      ),
                     ),
                   );
                 },
@@ -105,7 +109,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
               const SizedBox(
                 height: 20,
               ),
-              _progressContainer(),
+              //_progressContainer(),
             ],
           ),
         ),
