@@ -1,7 +1,7 @@
 import 'package:time_table/hive%20boxes/habit_box.dart';
 import 'package:time_table/models/habit_tracker/habit_model.dart';
 
-Habit calculateStreak({
+void calculateStreak({
   required Habit habit,
 }) {
   final habitbox = HabitBox.getHabitBox();
@@ -47,9 +47,13 @@ Habit calculateStreak({
 
     index = lastIndex;
   }
+
   habitbox.put(
     habit.title,
-    habit.updateWith(streak: streaks, lastIndex: lastIndex, index: index),
+    habit.updateWith(
+      streak: streaks,
+      lastIndex: lastIndex,
+      index: index,
+    ),
   );
-  return habit.updateWith(streak: streaks, lastIndex: lastIndex, index: index);
 }

@@ -81,14 +81,14 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                             ),
                           );
                         }
-                        return InkWell(
+                        calculateStreak(habit: habits[index]);
+                        return GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (BuildContext context) {
                                   return HabitSummaryScreen(
-                                    habit:
-                                        calculateStreak(habit: habits[index]),
+                                    habit: habits[index],
                                   );
                                 },
                               ),
