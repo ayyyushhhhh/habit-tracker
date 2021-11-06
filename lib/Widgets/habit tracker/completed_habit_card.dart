@@ -12,7 +12,7 @@ class CompletedHabitCard extends StatelessWidget {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
     return Container(
-      width: deviceWidth,
+      //  width: deviceWidth,
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -32,31 +32,37 @@ class CompletedHabitCard extends StatelessWidget {
           const SizedBox(
             width: 20,
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                completedHabit.title,
-                style: TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                  fontSize: deviceWidth / 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+          Expanded(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    completedHabit.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      decoration: TextDecoration.lineThrough,
+                      fontSize: deviceWidth / 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    completedHabit.description,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      decoration: TextDecoration.lineThrough,
+                      fontSize: deviceWidth / 22,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                completedHabit.description,
-                style: TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                  fontSize: deviceWidth / 22,
-                  color: Colors.white,
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),
