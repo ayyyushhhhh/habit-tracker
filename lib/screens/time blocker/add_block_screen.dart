@@ -227,7 +227,6 @@ class _AddBlockScreenState extends State<AddBlockScreen> {
       cancelText: "Cancel",
     );
     if (picked != null) {
-      // TODO: Do something regarding the set state method
       setState(
         () {
           if (selectTimetype == TimeType.startTime) {

@@ -129,8 +129,8 @@ class _HabitCardState extends State<HabitCard> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size.height;
-    final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceHeight = MediaQuery.of(context).size.height / 1.5;
+    final deviceWidth = MediaQuery.of(context).size.width / 1.5;
     return Column(
       children: [
         Container(

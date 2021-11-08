@@ -50,7 +50,7 @@ class AddHabitcard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size.height;
+    final deviceHeight = MediaQuery.of(context).size.height / 1.5;
     // final deviceWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
@@ -67,21 +67,20 @@ class AddHabitcard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                Icons.add,
-                size: 80,
-              ),
+              Icon(Icons.add, size: deviceHeight / 5),
             ],
           ),
         ),
         SizedBox(
           height: 2,
         ),
-        Text(
-          "Add Habit",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+        Container(
+          child: Text(
+            "Add Habit",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         )
       ],

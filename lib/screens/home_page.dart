@@ -6,6 +6,7 @@ import 'package:time_table/Notification%20Manager/notification_manager.dart';
 import 'package:time_table/screens/habit%20tracker/habit_tracker_screen.dart';
 import 'package:time_table/screens/settings/settings_screen.dart';
 import 'package:time_table/screens/time%20blocker/time_blocker_screen.dart';
+import 'package:time_table/utils/habit%20tracker/habit_tracker_colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -79,8 +80,7 @@ class _HomePageState extends State<HomePage> {
           data: NavigationBarThemeData(
             height: 80,
             // backgroundColor: Colors.teal,
-            indicatorColor:
-                _currentIndex == 0 ? Colors.purple.shade200 : Colors.teal,
+            indicatorColor: _currentIndex == 0 ? kprimaryColor : Colors.teal,
             labelTextStyle: MaterialStateProperty.all(
               const TextStyle(
                 fontSize: 16,

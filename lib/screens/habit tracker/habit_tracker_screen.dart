@@ -99,7 +99,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                       },
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 0.85,
+                        childAspectRatio: 1.1,
                       ),
                     ),
                   );
@@ -189,7 +189,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: devicewidth! / 12,
-                          color: Colors.purpleAccent.shade100,
+                          color: kprimaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       )
