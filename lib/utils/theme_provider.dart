@@ -16,10 +16,11 @@ class ThemeManager with ChangeNotifier {
       primaryColorDark: Colors.black,
       indicatorColor: Colors.white,
       canvasColor: kdarkModeColor,
+      fontFamily: "News Gothic Std",
     ),
     ThemeData.light().copyWith(
       textTheme: ThemeData.dark().textTheme.apply(
-            fontFamily: "San Francisco",
+            fontFamily: "News Gothic Std",
             bodyColor: Colors.black,
             displayColor: Colors.white,
           ),

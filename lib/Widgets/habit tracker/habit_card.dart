@@ -141,6 +141,14 @@ class _HabitCardState extends State<HabitCard> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: kcardColor,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

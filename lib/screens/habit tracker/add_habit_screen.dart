@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:time_table/hive%20boxes/habit_box.dart';
 import 'package:time_table/models/habit_tracker/habit_model.dart';
+import 'package:time_table/utils/habit%20tracker/habit_tracker_colors.dart';
 
 class AddHabitScreen extends StatefulWidget {
   @override
@@ -174,7 +175,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                             height: deviceHeight / 10,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.purpleAccent.shade100,
+                              color: kprimaryColor,
                             ),
                             child: GestureDetector(
                               onTap: () {

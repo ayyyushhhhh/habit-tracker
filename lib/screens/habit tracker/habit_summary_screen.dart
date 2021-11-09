@@ -134,7 +134,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                           style: TextStyle(
                             fontSize: deviceWidth / 15,
                             fontWeight: FontWeight.w700,
-                            color: Colors.purpleAccent.shade100,
+                            color: kprimaryColor,
                           ),
                         ),
                         Text(
@@ -193,7 +193,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
                                 child: Text(
                                   "Since, ${DateFormat.yMMMMd('en_US').format(widget.habit.dateCreated!)}",
                                   style: TextStyle(
-                                    fontSize: deviceWidth / 15,
+                                    fontSize: deviceWidth / 17,
                                     letterSpacing: 1.2,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -372,7 +372,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
     return Container(
       width: deviceWidth,
       decoration: BoxDecoration(
-        color: Colors.purpleAccent.shade100,
+        color: kprimaryColor,
         borderRadius: BorderRadius.circular(15),
       ),
       child: _buildHabitCalendar(),

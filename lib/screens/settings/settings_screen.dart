@@ -52,6 +52,11 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  void openSurvey() {
+    const String url = "https://forms.gle/ftUP777YYjaTnb4b7";
+    Utils.openLinks(url: Uri.encodeFull(url));
+  }
+
   void openPrivacyPolicy() {
     const String url =
         "https://trackandgrow.blogspot.com/2021/07/privacypolicy.html";
@@ -578,6 +583,21 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        openSurvey();
+                      },
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.only(right: 20),
+                        leading: const Icon(Icons.note),
+                        title: Text(
+                          "Survey",
+                          style: TextStyle(fontSize: deviceWidth / 22),
+                        ),
+                        subtitle: const Text(
+                            "Please Fill this survey for future updates"),
+                      ),
+                    ),
                     const Divider(),
                     Text(
                       "About",
@@ -612,7 +632,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         "App Version",
                         style: TextStyle(fontSize: deviceWidth / 22),
                       ),
-                      subtitle: const Text("4.0.2"),
+                      subtitle: const Text("5.0.0"),
                     ),
                   ],
                 ),
