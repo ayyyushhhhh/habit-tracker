@@ -20,24 +20,11 @@ class HabitTrackerScreen extends StatefulWidget {
 }
 
 class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
-  double? deviceHeight;
-
-  double? devicewidth;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    deviceHeight = MediaQuery.of(context).size.height;
-    devicewidth = MediaQuery.of(context).size.width;
+    final double deviceHeight = MediaQuery.of(context).size.height;
+    final double devicewidth = MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -45,12 +32,12 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _headWidget(),
+              _headWidget(deviceHeight, devicewidth),
 
               ValueListenableBuilder<Box<Habit>>(
                 builder: (BuildContext context, box, Widget? child) {
                   final habits = box.values.toList().cast<Habit>();
-                  return SizedBox(
+                  return Container(
                     child: GridView.builder(
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
@@ -75,33 +62,34 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                         }
                         calculateStreak(habit: habits[index]);
 
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return HabitSummaryScreen(
-                                    habit: habits[index],
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: HabitCard(habit: habits[index]),
+                        return Container(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return HabitSummaryScreen(
+                                      habit: habits[index],
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                            child: HabitCard(habit: habits[index]),
+                          ),
                         );
                       },
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 1.1,
                       ),
                     ),
                   );
                 },
                 valueListenable: HabitBox.getHabitBox().listenable(),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
               //_progressContainer(),
             ],
           ),
@@ -154,11 +142,11 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
 //     );
 //   }
 
-  Align _headWidget() {
+  Align _headWidget(double deviceHeight, double devicewidth) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.only(left: 50, right: 50, top: 10),
+        margin: const EdgeInsets.only(left: 40, right: 40, top: 10),
         child: Consumer<User>(
           builder: (context, user, child) {
             return Row(
@@ -171,7 +159,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                       Text(
                         "Hello, ",
                         style: TextStyle(
-                          fontSize: devicewidth! / 12,
+                          fontSize: devicewidth / 12,
                           color: kHeadingTextColor,
                           fontWeight: FontWeight.bold,
                         ),
@@ -180,7 +168,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                         user.getName,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: devicewidth! / 15,
+                          fontSize: devicewidth / 15,
                           color: kprimaryColor,
                           fontWeight: FontWeight.bold,
                         ),
