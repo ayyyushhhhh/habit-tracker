@@ -34,9 +34,9 @@ Future<void> main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(HabitAdapter());
-  print("1");
+
   await Hive.openBox<Habit>("Habits");
-  print("2");
+
   runApp(MyApp());
 }
 
