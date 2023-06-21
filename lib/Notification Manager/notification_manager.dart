@@ -1,36 +1,28 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rxdart/subjects.dart';
 // ignore: depend_on_referenced_packages
 import 'package:timezone/timezone.dart' as tz;
 
 // ignore: avoid_classes_with_only_static_members
 class NotificationManger {
   static final _notification = FlutterLocalNotificationsPlugin();
-  static final onNotifications = BehaviorSubject<String?>();
+  // static final onNotifications = BehaviorSubject<String?>();
   static Future<NotificationDetails> _notificationDetails() async {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
-        "channel id 4",
-        "channel name",
-        "channel descriprion",
+        "channel id 1",
+        "Reminder",
         importance: Importance.max,
       ),
-      iOS: IOSNotificationDetails(),
     );
   }
 
   static Future init({bool initSchedule = false}) async {
-    const androidSettings =
-        AndroidInitializationSettings("@mipmap/ic_launcher");
-    const iosSettings = IOSInitializationSettings();
-    const settings =
-        InitializationSettings(android: androidSettings, iOS: iosSettings);
-    await _notification.initialize(
-      settings,
-      onSelectNotification: (payload) async {
-        onNotifications.add(payload);
-      },
-    );
+    AndroidInitializationSettings androidSettings =
+        const AndroidInitializationSettings("@mipmap/ic_launcher");
+    InitializationSettings initializationSettings =
+        InitializationSettings(android: androidSettings);
+
+    await _notification.initialize(initializationSettings);
   }
 
   static Future showNotification({
@@ -63,7 +55,7 @@ class NotificationManger {
       await _notificationDetails(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle: true,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 
@@ -83,7 +75,7 @@ class NotificationManger {
       await _notificationDetails(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle: true,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }

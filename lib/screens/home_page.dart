@@ -18,7 +18,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    listenNotifications();
 
     NotificationManger.showNotificationDaily(
       // ignore: avoid_redundant_argument_values
@@ -34,32 +33,6 @@ class _HomePageState extends State<HomePage> {
       SystemUiMode.immersiveSticky,
       overlays: [SystemUiOverlay.top],
     );
-  }
-
-  // void listenNotifications() {
-  //   NotificationManger.listenNotifications(
-  //       onNotification: (String payload) {
-  //     if (payload == "task") {
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => HabitTrackerScreen(),
-  //         ),
-  //       );
-  //     }
-  //   });
-  // }
-  // }
-
-  void listenNotifications() =>
-      NotificationManger.onNotifications.stream.listen(onClickNotification);
-
-  void onClickNotification(String? payload) {
-    if (payload == "task") {
-      _currentIndex = 1;
-    } else {
-      _currentIndex = 0;
-    }
   }
 
   int _currentIndex = 0;

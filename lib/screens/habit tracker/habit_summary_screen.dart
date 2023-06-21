@@ -412,6 +412,7 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
               ),
             );
           }
+          return null;
         },
       ),
     );
@@ -424,8 +425,8 @@ class _HabitSummaryScreenState extends State<HabitSummaryScreen> {
     image.writeAsBytesSync(imageBytes);
     const String appURl =
         "https://play.google.com/store/apps/details?id=com.scarecrowhouse.activity_tracker";
-    await Share.shareFiles(
-      [image.path],
+    await Share.shareXFiles(
+      [XFile(image.path)],
       text:
           "Track and grow is helping me in building this habit. Download Track and grow - $appURl ",
     );

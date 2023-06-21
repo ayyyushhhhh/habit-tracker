@@ -46,7 +46,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                       style: TextStyle(
                         fontSize: _deviceWidth / 12,
                         color: Colors.teal.shade300,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ),
@@ -169,12 +169,13 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
 
   TableCalendar _buildCalendar() {
     return TableCalendar(
+      rowHeight: 80,
       headerStyle:
           const HeaderStyle(formatButtonVisible: false, titleCentered: true),
       calendarFormat: CalendarFormat.week,
       focusedDay: DateTime.now(),
       firstDay: DateTime(2019, 06, 13),
-      lastDay: DateTime(2022, 12, 31),
+      lastDay: DateTime(2031, 12, 31),
       selectedDayPredicate: (day) {
         return isSameDay(_selectedDate, day);
       },
@@ -190,10 +191,9 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
       calendarBuilders: CalendarBuilders(
         todayBuilder: (context, dateTime, datetime) {
           return Container(
+            margin: EdgeInsets.all(5),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.purple.shade100,
-            ),
+                borderRadius: BorderRadius.circular(10), color: Colors.teal),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -201,16 +201,19 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                   Text(
                     DateFormat.E().format(datetime),
                     style: TextStyle(
-                      color: Colors.black45,
-                      fontSize: _deviceWidth / 25,
+                      color: Colors.white,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Text(
                     DateFormat.d().format(datetime),
                     style: TextStyle(
-                      //color: Colors.white,
-                      fontSize: _deviceWidth / 20,
+                      color: Colors.white,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -228,7 +231,7 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                   DateFormat.E().format(dateTime),
                   style: TextStyle(
                     color: Colors.blueGrey,
-                    fontSize: _deviceWidth / 25,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -239,11 +242,43 @@ class _TimeBlockerScreenState extends State<TimeBlockerScreen> {
                   DateFormat.d().format(dateTime),
                   style: TextStyle(
                     //color: Colors.white,
-                    fontSize: _deviceWidth / 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
+            ),
+          );
+        },
+        selectedBuilder: (context, day, focusedDay) {
+          return Container(
+            margin: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Color(0xFFFF4D98),
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    DateFormat.E().format(day),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: _deviceWidth / 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    DateFormat.d().format(day),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: _deviceWidth / 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

@@ -124,7 +124,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
             style: TextStyle(
               fontSize: 34,
               color: Colors.purpleAccent.shade100,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(
@@ -177,7 +177,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                         style: TextStyle(
                           fontSize: devicewidth! / 12,
                           color: kHeadingTextColor,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       Text(
@@ -186,7 +186,7 @@ class _HabitTrackerScreenState extends State<HabitTrackerScreen> {
                         style: TextStyle(
                           fontSize: devicewidth! / 12,
                           color: Colors.purpleAccent.shade100,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       )
                     ],

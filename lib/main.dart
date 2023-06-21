@@ -18,7 +18,6 @@ import 'package:time_table/utils/user_info.dart';
 // ignore: depend_on_referenced_packages
 import 'package:timezone/data/latest.dart' as tz;
 
-import 'firebase/firebase_authentication.dart';
 import 'models/time_blocker/time_block_model.dart';
 
 Future<void> main() async {
